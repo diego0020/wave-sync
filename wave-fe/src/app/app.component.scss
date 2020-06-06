@@ -1,0 +1,44 @@
+.wrapper {
+    display: flex;
+    height: calc(100vh - 20px);
+}
+
+.game {
+    flex: 1;
+    padding: 20px;
+
+    .board {
+        width: 100%;
+        height: calc(100% - 300px);
+    }
+
+    .needle {
+        margin-top: 20px;
+        size: 300px;
+        font-weight: bold;
+        font-size: 200px;
+        margin-left: calc(50% - 1ex);
+    }
+
+    .clues {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .clue {
+        padding: 20px;
+        border: 1px solid gray;
+    }
+
+    .clue.target {
+        border: none;
+    }
+}
+
+.sidebar {
+    background-color: lightblue;
+    width: 20%;
+    max-width: 100px;
+    height:100%;
+}
+
