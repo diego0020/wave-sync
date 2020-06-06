@@ -11,7 +11,7 @@ const gameRef = 'games/IyN3LKwbM5SKrXzC5Lnz';
 })
 export class AppComponent implements OnInit {
   title = 'wave-fe';
-  guess = 42;
+  guess = 0;
   saving = false;
 
   ngOnInit() {
@@ -23,10 +23,14 @@ export class AppComponent implements OnInit {
   }
 
   moveNeedle(delta) {
+    if (this.saving) {
+      return;
+    }
     console.log(delta);
     this.saving = true;
+    const newGuess = Math.min(100, Math.max(0, this.guess + delta));
     firebase.database().ref(gameRef).update({
-      guess: this.guess + delta
+      guess: newGuess
     }, (error) => {
       if (error) {
         console.warn(error);

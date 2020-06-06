@@ -11,47 +11,64 @@
     .board {
         width: 100%;
         height: calc(100% - 300px);
+        position: relative;
     }
 
     .needle {
-        margin-top: 20px;
-        size: 300px;
-        font-weight: bold;
-        font-size: 200px;
-        margin-left: calc(50% - 1ex);
+        width: 40%;
+        height: 10px;
+        background-color: lightslategray;
+        position: absolute;
+        bottom: 50px;
+        left: 10%;
+        transition: transform 0.3s;
+        transform-origin: right;
+    }
+
+    .buttons {
+        width: 100px;
+        height: 50px;
+        position: absolute;
+        top: 20%;
     }
 
     .button {
-        width: 200px;
-        height: 50px;
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    .guess {
+        position: absolute;
+        bottom: 10px;
+        left: 40%;
+        text-align: center;
+        width: 20%;
     }
 
     .decrease {
-        position: absolute;
-        top: 20%;
         left: 20px;
     }
 
     .increase {
-        position: absolute;
-        top: 20%;
         right: 20px;
     }
 
     .clues {
         display: flex;
-        justify-content: space-between;
     }
 
     .clue {
         padding: 20px;
+        text-align: center;
+        flex: 20% 1;
     }
 
     .clue.target {
         border: 1px solid gray;
         border-radius: 10px;
         background-color: lightgreen;
-    }
+        flex: 0;
+        }
 }
 
 .sidebar {

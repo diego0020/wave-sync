@@ -2,15 +2,38 @@
   <div class="game">
 
     <div class="board">
-      <button class="button decrease" (click)="moveNeedle(-1)" [disabled]="saving">
-        Less
-      </button>
-      <div class="needle">
+      <div class="buttons decrease">
+        <button class="button" (click)="moveNeedle(-1)">
+          -1
+        </button>
+
+        <button class="button" (click)="moveNeedle(-2)">
+          -2
+        </button>
+
+        <button class="button" (click)="moveNeedle(-5)">
+          -5
+        </button>
+      </div>
+      <div class="needle" [ngStyle]="{'transform': 'rotate(' + guess/200 + 'turn)'}">
+      </div>
+      <div class="guess">
         {{guess}}
       </div>
-      <button class="button increase" (click)="moveNeedle(+1)" [disabled]="saving">
-        More
-      </button>
+
+      <div class="buttons increase">
+        <button class="button" (click)="moveNeedle(1)">
+          +1
+        </button>
+
+        <button class="button" (click)="moveNeedle(2)">
+          +2
+        </button>
+
+        <button class="button" (click)="moveNeedle(5)">
+          +5
+        </button>
+      </div>
     </div>
 
     <div class="clues">
