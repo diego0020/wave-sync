@@ -6,6 +6,7 @@
 .game {
     flex: 1;
     padding: 20px;
+    position: relative;
 
     .board {
         width: 100%;
@@ -18,6 +19,23 @@
         font-weight: bold;
         font-size: 200px;
         margin-left: calc(50% - 1ex);
+    }
+
+    .button {
+        width: 200px;
+        height: 50px;
+    }
+
+    .decrease {
+        position: absolute;
+        top: 20%;
+        left: 20px;
+    }
+
+    .increase {
+        position: absolute;
+        top: 20%;
+        right: 20px;
     }
 
     .clues {

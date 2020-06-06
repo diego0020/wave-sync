@@ -2,9 +2,15 @@
   <div class="game">
 
     <div class="board">
+      <button class="button decrease" (click)="moveNeedle(-1)" [disabled]="saving">
+        Less
+      </button>
       <div class="needle">
-        {{value}}
+        {{guess}}
       </div>
+      <button class="button increase" (click)="moveNeedle(+1)" [disabled]="saving">
+        More
+      </button>
     </div>
 
     <div class="clues">

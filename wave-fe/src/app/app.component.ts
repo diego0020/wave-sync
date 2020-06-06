@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import * as firebase from 'firebase/app';
 import 'firebase/database';
 
+const gameRef = 'games/IyN3LKwbM5SKrXzC5Lnz';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -9,14 +11,27 @@ import 'firebase/database';
 })
 export class AppComponent implements OnInit {
   title = 'wave-fe';
-  value = 42;
+  guess = 42;
+  saving = false;
 
   ngOnInit() {
     console.log('init');
-    const starCountRef = firebase.database().ref('games/IyN3LKwbM5SKrXzC5Lnz/guess');
+    const starCountRef = firebase.database().ref(gameRef + '/guess');
     starCountRef.on('value', (snapshot) => {
-      console.log(snapshot);
-      this.value = snapshot.val();
+      this.guess = snapshot.val();
+    });
+  }
+
+  moveNeedle(delta) {
+    console.log(delta);
+    this.saving = true;
+    firebase.database().ref(gameRef).update({
+      guess: this.guess + delta
+    }, (error) => {
+      if (error) {
+        console.warn(error);
+      }
+      this.saving = false;
     });
   }
 }
