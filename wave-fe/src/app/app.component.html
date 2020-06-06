@@ -15,11 +15,6 @@
           -5
         </button>
       </div>
-      <div class="needle" [ngStyle]="{'transform': 'rotate(' + guess/200 + 'turn)'}">
-      </div>
-      <div class="guess">
-        {{guess}}
-      </div>
 
       <div class="buttons increase">
         <button class="button" (click)="moveNeedle(1)">
@@ -33,6 +28,12 @@
         <button class="button" (click)="moveNeedle(5)">
           +5
         </button>
+      </div>
+
+      <div class="needle" [ngStyle]="{'transform': 'rotate(' + guess/200 + 'turn)'}">
+      </div>
+      <div class="guess">
+        {{guess}}
       </div>
     </div>
 

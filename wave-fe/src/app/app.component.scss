@@ -7,11 +7,21 @@
     flex: 1;
     padding: 20px;
     position: relative;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: stretch;
 
     .board {
         width: 100%;
-        height: calc(100% - 300px);
+        flex: 70% 1 0;
+        min-height: 70%;
         position: relative;
+    }
+
+    .clues {
+        display: flex;
+        flex: 70% 0 1;
+        width: 100%;
     }
 
     .needle {
@@ -27,6 +37,7 @@
 
     .buttons {
         width: 100px;
+        max-width: calc(50vw - 100px);
         height: 50px;
         position: absolute;
         top: 20%;
@@ -51,10 +62,6 @@
 
     .increase {
         right: 20px;
-    }
-
-    .clues {
-        display: flex;
     }
 
     .clue {
