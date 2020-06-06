@@ -27,11 +27,12 @@
 
     .clue {
         padding: 20px;
-        border: 1px solid gray;
     }
 
     .clue.target {
-        border: none;
+        border: 1px solid gray;
+        border-radius: 10px;
+        background-color: lightgreen;
     }
 }
 
