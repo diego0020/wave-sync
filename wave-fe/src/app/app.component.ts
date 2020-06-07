@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import * as firebase from 'firebase/app';
 import 'firebase/database';
+import { Subject } from 'rxjs';
+import { auditTime } from 'rxjs/operators';
 
 const gameRef = 'games/IyN3LKwbM5SKrXzC5Lnz';
 
@@ -13,13 +15,20 @@ export class AppComponent implements OnInit {
   title = 'wave-fe';
   guess = 0;
   saving = false;
+  guessSubj = new Subject<number>();
 
   ngOnInit() {
     console.log('init');
     const starCountRef = firebase.database().ref(gameRef + '/guess');
     starCountRef.on('value', (snapshot) => {
-      this.guess = snapshot.val();
+      this.guessSubj.next(snapshot.val() as number);
     });
+
+    this.guessSubj.pipe(
+      auditTime(300)
+    ).subscribe(
+      v => { this.guess = v; }
+    );
   }
 
   moveNeedle(delta) {
