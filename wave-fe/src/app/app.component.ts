@@ -15,6 +15,7 @@ export class AppComponent implements OnInit {
   title = 'wave-fe';
   guess = 0;
   optimisticGuess = 0;
+  sentMsg = -1;
   guessSubj = new Subject<number>();
   moveSubj = new Subject<number>();
 
@@ -29,38 +30,48 @@ export class AppComponent implements OnInit {
     ).subscribe(
       v => {
         this.guess = v;
-        this.optimisticGuess = this.guess;
+        if (this.sentMsg !== v) {
+          this.optimisticGuess = this.guess;
+        }
+        this.sentMsg = -1;
       }
     );
 
     this.moveSubj.pipe(
       tap(
-        d => { this.optimisticGuess = Math.max(0, Math.min(100, this.guess + d)); }
+        d => {
+          this.optimisticGuess = Math.max(0, Math.min(100,
+            this.optimisticGuess + d
+          ));
+        }
       ),
-      bufferTime(500),
+      bufferTime(300),
       filter(a => a.length > 0))
       .subscribe((deltas: number[]) => {
         const newGuess = Math.max(0, Math.min(100,
           deltas.reduce((acc, curr) => acc + curr, this.guess)
         ));
-        if (newGuess !== this.guess) {
-          this.sendGuess(newGuess);
-        } else {
-          this.optimisticGuess = this.guess;
-        }
+        console.log(newGuess, 'newGuess');
+        console.log(this.optimisticGuess, 'opti');
+        this.sendGuess(newGuess);
       });
   }
 
-  moveNeedle(delta) {
+  moveNeedle(delta: number) {
     this.moveSubj.next(delta);
   }
 
-  sendGuess(newGuess) {
+  sendGuess(newGuess: number) {
+    this.sentMsg = newGuess;
+    const rollBack = this.guess;
+    this.guess = newGuess;
     firebase.database().ref(gameRef).update({
       guess: newGuess
     }, (error) => {
       if (error) {
         console.warn(error);
+        this.guess = rollBack;
+        this.optimisticGuess = this.guess;
       }
     });
   }
