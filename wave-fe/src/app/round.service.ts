@@ -2,79 +2,44 @@ import { Injectable } from '@angular/core';
 import { Subject, BehaviorSubject } from 'rxjs';
 import * as firebase from 'firebase/app';
 import 'firebase/database';
-import { auditTime, bufferTime, filter, tap, debounceTime } from 'rxjs/operators';
-
-const roundRef = 'rounds/testRound';
+import { bufferTime, filter, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class RoundService {
-  private optimisticGuess = 0;
-  private trueValue = 0;
-  private sentMsg = -1;
-  private guessSubj = new BehaviorSubject<number>(10);
-  private moveSubj = new Subject<number>();
-  guess$ = this.guessSubj.asObservable();
+  private phaseSubj = new BehaviorSubject<number>(-1);
+  private cluesSubj = new Subject<any>();
+  private roundId = 'testRound';
+  private roundAddr = `rounds/${this.roundId}`;
+  private roundRef = firebase.database().ref(this.roundAddr);
+  phase$ = this.phaseSubj.asObservable().pipe(
+    distinctUntilChanged()
+  );
+  clues$ = this.cluesSubj.asObservable();
 
   constructor() {
-    const starCountRef = firebase.database().ref(roundRef + '/guess');
-    starCountRef.on('value', (snapshot) => {
-      this.trueValue = snapshot.val() as number;
-      if (this.trueValue !== this.sentMsg) {
-        this.guessSubj.next(this.trueValue);
-        this.optimisticGuess = this.trueValue;
-      }
-    });
 
-    this.moveSubj.pipe(
-      tap(
-        d => {
-          this.optimisticGuess = this.clamp(this.optimisticGuess + d);
-          this.guessSubj.next(this.optimisticGuess);
+    this.roundRef.on('value', (snapshot) => {
+      const roundData = snapshot.val();
+      this.phaseSubj.next(roundData.phase);
+    });
+  }
+
+  resetRound() {
+    const newRoundData = {
+      phase: 0,
+      guessingTeam: 'a',
+      teller: 'uid',
+      clue: '...',
+      extremes: { end: '.', start: '.' }
+    };
+    this.roundRef.set(newRoundData,
+      (error) => {
+        if (error) {
+          console.warn(error);
         }
-      ),
-      bufferTime(500),
-      filter(a => a.length > 0))
-      .subscribe((deltas: number[]) => {
-        const newGuess = this.clamp(
-          deltas.reduce((acc, curr) => acc + curr, this.trueValue)
-        );
-        this.sendGuess(newGuess);
       });
-
-    // Failsafe: after 1 sec of inactivity write the value from db
-    this.moveSubj.pipe(
-      debounceTime(1000)
-    ).subscribe(() => {
-      this.optimisticGuess = this.trueValue;
-      this.guessSubj.next(this.trueValue);
-    });
-  }
-
-  moveNeedle(delta: number) {
-    this.moveSubj.next(delta);
-  }
-
-  private sendGuess(newGuess: number) {
-    this.sentMsg = newGuess;
-    this.optimisticGuess = newGuess;
-    this.guessSubj.next(this.optimisticGuess);
-    firebase.database().ref(roundRef).update({
-      guess: newGuess
-    }, (error) => {
-      if (error) {
-        console.warn(error);
-        this.optimisticGuess = this.trueValue;
-        this.guessSubj.next(this.trueValue);
-      }
-    });
-  }
-
-  private clamp(n: number) {
-    return Math.max(0, Math.min(
-      100, n
-    ));
   }
 }

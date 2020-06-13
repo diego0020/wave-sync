@@ -3,8 +3,14 @@
   "rules": {
     "rounds": {
       "$round": {
-        ".read": "true",
-        ".write": "true",
+        ".read": "auth !== null",
+        ".write": "auth !== null"
+      }
+    },
+    "guesses": {
+      "$round": {
+        ".read": "auth !== null",
+        ".write": "auth !== null",
         ".validate": "newData.hasChildren(['guess']) && newData.child('guess').isNumber() && newData.child('guess').val() >=0 && newData.child('guess').val() <=100"
       }
     }

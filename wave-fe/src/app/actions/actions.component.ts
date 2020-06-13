@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { RoundService } from '../round.service';
 
 @Component({
   selector: 'app-actions',
@@ -8,9 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ActionsComponent implements OnInit {
 
-  constructor() { }
+  constructor(private round: RoundService) { }
 
   ngOnInit(): void {
+  }
+
+  reset() {
+    this.round.resetRound();
   }
 
 }
