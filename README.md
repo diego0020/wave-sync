@@ -60,7 +60,7 @@ Each round consists of 4 phases
 - [x] Add anonymous authentication
 - [x] Create mock game
 - [x] Create round data
-- [ ] Move FE game logic to service
+- [x] Move FE game logic to service
 - [ ] Split into components 
 - [ ] Implement rounds state machine
 - [ ] Implement phase 1

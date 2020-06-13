@@ -1,7 +1,5 @@
 <div class="wrapper">
   <div class="game">
-
-
     <div class="board">
       <div>
         userId : {{userId}}
@@ -34,10 +32,10 @@
         </button>
       </div>
 
-      <div class="needle" [ngStyle]="{'transform': 'rotate(' + optimisticGuess/200 + 'turn)'}">
+      <div class="needle" [ngStyle]="{'transform': 'rotate(' + (guess$ | async) /200 + 'turn)'}">
       </div>
       <div class="guess">
-        {{optimisticGuess}}
+        {{guess$ | async}}
       </div>
     </div>
 
