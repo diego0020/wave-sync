@@ -9,16 +9,12 @@ import { auditTime } from 'rxjs/operators';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
   title = 'Wave Sync';
-  guess$: Observable<number>;
-  softGuess$: Observable<number>;
   userId = null;
 
   constructor(private round: RoundService) {
-    this.guess$ = round.guess$;
   }
 
   ngOnInit() {
@@ -38,9 +34,5 @@ export class AppComponent implements OnInit {
       }
     });
 
-  }
-
-  moveNeedle(delta: number) {
-    this.round.moveNeedle(delta);
   }
 }

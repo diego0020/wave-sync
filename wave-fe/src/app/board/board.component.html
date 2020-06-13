@@ -1,0 +1,36 @@
+<div class="board">
+    <div class="buttons decrease">
+        <button class="button" (click)="moveNeedle(-1)">
+            -1
+        </button>
+
+        <button class="button" (click)="moveNeedle(-2)">
+            -2
+        </button>
+
+        <button class="button" (click)="moveNeedle(-5)">
+            -5
+        </button>
+    </div>
+
+    <div class="buttons increase">
+        <button class="button" (click)="moveNeedle(1)">
+            +1
+        </button>
+
+        <button class="button" (click)="moveNeedle(2)">
+            +2
+        </button>
+
+        <button class="button" (click)="moveNeedle(5)">
+            +5
+        </button>
+    </div>
+
+    <div class="needle" [ngStyle]="{'transform': 'rotate(' + (guess$ | async) /200 + 'turn)'}">
+    </div>
+    <div class="guess">
+        {{guess$ | async}}
+    </div>
+    <app-clues></app-clues>
+</div>

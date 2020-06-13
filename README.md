@@ -61,10 +61,10 @@ Each round consists of 4 phases
 - [x] Create mock game
 - [x] Create round data
 - [x] Move FE game logic to service
-- [ ] Split into components 
+- [x] Split into components 
+- [ ] Switch css classes to BEM
 - [ ] Implement rounds state machine
 - [ ] Implement phase 1
 - [ ] Implement phase 2
 - [ ] Implement phase 3
 - [ ] Implement phase 4
-- [ ] Switch css classes to BEM

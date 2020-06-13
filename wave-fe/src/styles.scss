@@ -1,1 +1,83 @@
-/* You can add global styles to this file, and also import other style files */
+.wrapper {
+    display: flex;
+    height: calc(100vh - 20px);
+}
+
+.game {
+    flex: 1;
+    padding: 20px;
+    position: relative;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: stretch;
+
+    .board {
+        width: 100%;
+        flex: 70% 1 0;
+        min-height: 70%;
+        position: relative;
+    }
+
+    .clues {
+        display: flex;
+        flex: 70% 0 1;
+        width: 100%;
+        position: absolute;
+        bottom: -80px;
+    }
+
+    .needle {
+        width: 40%;
+        height: 10px;
+        background-color: lightslategray;
+        position: absolute;
+        bottom: 50px;
+        left: 10%;
+        transition: transform 0.3s;
+        transform-origin: right;
+    }
+
+    .buttons {
+        width: 100px;
+        max-width: calc(50vw - 100px);
+        height: 50px;
+        position: absolute;
+        top: 20%;
+    }
+
+    .button {
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    .guess {
+        position: absolute;
+        bottom: 10px;
+        left: 40%;
+        text-align: center;
+        width: 20%;
+    }
+
+    .decrease {
+        left: 20px;
+    }
+
+    .increase {
+        right: 20px;
+    }
+
+    .clue {
+        padding: 20px;
+        text-align: center;
+        flex: 20% 1;
+    }
+
+    .clue.target {
+        border: 1px solid gray;
+        border-radius: 10px;
+        background-color: lightgreen;
+        flex: 0;
+        }
+}
+
+
