@@ -41,7 +41,7 @@ Each round consists of 4 phases
             "guessing-team" : "a",
             "teller" : "$player",
             "clue" : "lion",
-            "ends" : {"start": "easy to kill", "end": "hard to kill"},
+            "extremes" : {"start": "easy to kill", "end": "hard to kill"},
             "true-position" : 44,
             "guess" : 30,
             "counter-guess" : "left"
@@ -57,10 +57,10 @@ Each round consists of 4 phases
 
 ## Tasks
 
-- [ ] Add anonymous authentication
+- [x] Add anonymous authentication
 - [ ] Create mock game
 - [ ] Create round data
-- [ ] Move game logic to service in FE
+- [ ] Move game logic to service in FEe
 - [ ] Split into components 
 - [ ] Implement rounds state machine
 - [ ] Implement phase 1

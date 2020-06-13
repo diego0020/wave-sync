@@ -1,8 +1,8 @@
 {
   /* Visit https://firebase.google.com/docs/database/security to learn more about security rules. */
   "rules": {
-    "games": {
-      "$game": {
+    "rounds": {
+      "$round": {
         ".read": "true",
         ".write": "true",
         ".validate": "newData.hasChildren(['guess']) && newData.child('guess').isNumber() && newData.child('guess').val() >=0 && newData.child('guess').val() <=100"

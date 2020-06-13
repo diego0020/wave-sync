@@ -5,7 +5,7 @@ import 'firebase/auth';
 import { Subject } from 'rxjs';
 import { auditTime, bufferTime, filter, tap, debounceTime } from 'rxjs/operators';
 
-const gameRef = 'games/IyN3LKwbM5SKrXzC5Lnz';
+const roundRef = 'rounds/testRound';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +13,7 @@ const gameRef = 'games/IyN3LKwbM5SKrXzC5Lnz';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  title = 'wave-fe';
+  title = 'Wave Sync';
   guess = 0;
   optimisticGuess = 0;
   trueValue = 0;
@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
   userId = null;
 
   ngOnInit() {
-    const starCountRef = firebase.database().ref(gameRef + '/guess');
+    const starCountRef = firebase.database().ref(roundRef + '/guess');
     starCountRef.on('value', (snapshot) => {
       this.guessSubj.next(snapshot.val() as number);
     });
@@ -91,7 +91,7 @@ export class AppComponent implements OnInit {
     this.sentMsg = newGuess;
     const rollBack = this.guess;
     this.guess = newGuess;
-    firebase.database().ref(gameRef).update({
+    firebase.database().ref(roundRef).update({
       guess: newGuess
     }, (error) => {
       if (error) {
