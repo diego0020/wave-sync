@@ -1,36 +1,34 @@
-<div class="board">
-    <div class="buttons decrease">
-        <button class="button" (click)="moveNeedle(-1)">
-            -1
-        </button>
+<div class="board__buttons board__buttons-decrease">
+    <button class="board__button" (click)="moveNeedle(-1)">
+        -1
+    </button>
 
-        <button class="button" (click)="moveNeedle(-2)">
-            -2
-        </button>
+    <button class="board__button" (click)="moveNeedle(-2)">
+        -2
+    </button>
 
-        <button class="button" (click)="moveNeedle(-5)">
-            -5
-        </button>
-    </div>
-
-    <div class="buttons increase">
-        <button class="button" (click)="moveNeedle(1)">
-            +1
-        </button>
-
-        <button class="button" (click)="moveNeedle(2)">
-            +2
-        </button>
-
-        <button class="button" (click)="moveNeedle(5)">
-            +5
-        </button>
-    </div>
-
-    <div class="needle" [ngStyle]="{'transform': 'rotate(' + (guess$ | async) /200 + 'turn)'}">
-    </div>
-    <div class="guess">
-        {{guess$ | async}}
-    </div>
-    <app-clues></app-clues>
+    <button class="board__button" (click)="moveNeedle(-5)">
+        -5
+    </button>
 </div>
+
+<div class="board__buttons board__buttons-increase">
+    <button class="board__button" (click)="moveNeedle(1)">
+        +1
+    </button>
+
+    <button class="board__button" (click)="moveNeedle(2)">
+        +2
+    </button>
+
+    <button class="board__button" (click)="moveNeedle(5)">
+        +5
+    </button>
+</div>
+
+<div class="board__needle" [ngStyle]="{'transform': 'rotate(' + (rotation$ | async)  + 'turn)'}">
+</div>
+<div class="board__guess">
+    {{guess$ | async}}
+</div>
+<app-clues></app-clues>

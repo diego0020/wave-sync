@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { RoundService } from '../round.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-board',
@@ -8,9 +9,13 @@ import { RoundService } from '../round.service';
 })
 export class BoardComponent implements OnInit {
   guess$: Observable<number>;
+  rotation$: Observable<number>;
 
   constructor(private round: RoundService) {
     this.guess$ = round.guess$;
+    this.rotation$ = this.guess$.pipe(
+      map(n => 0.5 + (n / 200))
+    );
   }
 
   ngOnInit(): void {

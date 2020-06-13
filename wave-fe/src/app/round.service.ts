@@ -31,14 +31,14 @@ export class RoundService {
     this.moveSubj.pipe(
       tap(
         d => {
-          this.optimisticGuess = this.wrap(this.optimisticGuess + d);
+          this.optimisticGuess = this.clamp(this.optimisticGuess + d);
           this.guessSubj.next(this.optimisticGuess);
         }
       ),
       bufferTime(500),
       filter(a => a.length > 0))
       .subscribe((deltas: number[]) => {
-        const newGuess = this.wrap(
+        const newGuess = this.clamp(
           deltas.reduce((acc, curr) => acc + curr, this.trueValue)
         );
         this.sendGuess(newGuess);
@@ -72,7 +72,7 @@ export class RoundService {
     });
   }
 
-  private wrap(n: number) {
+  private clamp(n: number) {
     return Math.max(0, Math.min(
       100, n
     ));
