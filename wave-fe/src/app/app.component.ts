@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as firebase from 'firebase/app';
 import 'firebase/database';
+import 'firebase/auth';
 import { Subject } from 'rxjs';
 import { auditTime, bufferTime, filter, tap, debounceTime } from 'rxjs/operators';
 
@@ -19,6 +20,7 @@ export class AppComponent implements OnInit {
   sentMsg = -1;
   guessSubj = new Subject<number>();
   moveSubj = new Subject<number>();
+  userId = null;
 
   ngOnInit() {
     const starCountRef = firebase.database().ref(gameRef + '/guess');
@@ -63,6 +65,22 @@ export class AppComponent implements OnInit {
       this.optimisticGuess = this.trueValue;
       this.guess = this.trueValue;
     });
+
+    firebase.auth().signInAnonymously().catch(error => {
+      // Handle Errors here.
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.error(errorCode, errorMessage);
+    });
+
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.userId = user.uid;
+      } else {
+        this.userId = null;
+      }
+    });
+
   }
 
   moveNeedle(delta: number) {

@@ -67,3 +67,4 @@ Each round consists of 4 phases
 - [ ] Implement phase 2
 - [ ] Implement phase 3
 - [ ] Implement phase 4
+- [ ] Switch css classes to BEM
