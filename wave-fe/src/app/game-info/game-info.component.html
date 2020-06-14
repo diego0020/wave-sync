@@ -1,11 +1,11 @@
 <p>
-    userId : {{userId$|async}}
+    userId : {{userId$|async | slice:0:5}}
 </p>
 <ng-container *ngIf="round$ | async as round">
     <p>
-        phase: {{round.phase}}
+        teller: {{round.teller| slice:0:5}}
     </p>
     <p>
-        teller: {{round.teller}}
+        phase: {{round.phase}}
     </p>
 </ng-container>

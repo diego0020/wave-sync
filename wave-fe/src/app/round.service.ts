@@ -4,6 +4,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/database';
 import { AuthService } from './auth.service';
 import { AllCards } from './data';
+import { GuessService } from './guess.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,13 +17,15 @@ export class RoundService {
   private roundRef = firebase.database().ref(this.roundAddr);
   private roundSubject = new ReplaySubject<any>(1);
   private newRoundData: any = null;
+  private score: any = null;
 
   round$ = this.roundSubject.asObservable();
 
-  constructor(private auth: AuthService) {
+  constructor(private auth: AuthService, private guessServ: GuessService) {
 
     this.roundRef.on('value', (snapshot) => {
       const roundData = snapshot.val();
+      console.log(roundData, 'roundd ata');
       this.roundSubject.next(
         this.procRoundData(roundData)
       );
@@ -35,7 +38,8 @@ export class RoundService {
       guessingTeam: 'a',
       teller: this.auth.userSnap.uid,
       clue: '...',
-      extremes: { end: '.', start: '.' }
+      extremes: { end: '.', start: '.' },
+      finalGuess: null,
     };
     const resetGuess = {
       guess: 0
@@ -100,6 +104,18 @@ export class RoundService {
         end: this.newRoundData.end
       };
     }
+    if (roundData.phase === 4 && roundData.finalGuess) {
+      if (this.score === null) {
+        this.getScore(roundData);
+      } else {
+        roundData.score = this.score;
+      }
+    }
+    if (roundData.phase === 1) {
+      this.newRoundData = null;
+      this.score = null;
+    }
+
     return roundData;
   }
 
@@ -111,5 +127,47 @@ export class RoundService {
       start: card[0],
       end: card[1],
     };
+  }
+
+  sendGuess() {
+    const finalGuess = this.guessServ.value;
+
+    const updates = {
+      [this.guessAddr + '/guess']: finalGuess,
+      [this.roundAddr + '/phase']: 4,
+      [this.roundAddr + '/finalGuess']: finalGuess,
+    };
+
+    firebase.database().ref().update(updates,
+      (error) => {
+        if (error) {
+          console.warn(error);
+        }
+      });
+  }
+
+  private getScore(roundData) {
+    const finalGuess = roundData.finalGuess;
+    firebase.database().ref(this.privateAddr)
+      .once('value', snap => {
+        const data = snap.val();
+        this.score = {
+          score: this.calculateScore(finalGuess, data.truePosition),
+          trueValue: data.truePosition,
+          finalGuess
+        };
+        roundData.score = this.score;
+        this.roundSubject.next(roundData);
+      });
+  }
+
+  private calculateScore(a: number, b: number) {
+    const diff = Math.abs(a - b);
+    if (diff < 10) {
+      return 10;
+    } else if (diff < 20) {
+      return 5;
+    }
+    return 0;
   }
 }

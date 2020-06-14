@@ -1,3 +1,7 @@
-<button (click)="reset()">
+<button (click)="sendGuess()" [disabled]="throttled || (disableSend$ | async)">
+    Send guess
+</button>
+
+<button (click)="reset()" [disabled]="throttled">
     Restart round
 </button>

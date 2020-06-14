@@ -13,6 +13,7 @@ export class BoardComponent implements OnInit {
   rotation$: Observable<number>;
   trueValueRotation$: Observable<number>;
   clues$: Observable<any>;
+  score$: Observable<any>;
   showGuessButtons$: Observable<boolean>;
   showClueInput$: Observable<boolean>;
   clueInput = '';
@@ -25,11 +26,18 @@ export class BoardComponent implements OnInit {
     );
 
     this.trueValueRotation$ = roundServ.round$.pipe(
-      map(r => r !== null ? 0.5 + (r.trueValue / 200) : null)
+      map(r => {
+        if (r.phase === 0) {
+          return 0.5 + (r.trueValue / 200);
+        }
+        if (r.phase === 4 && r.score) {
+          return 0.5 + (r.score.trueValue / 200);
+        }
+        return null;
+      })
     );
 
     this.clues$ = roundServ.round$.pipe(
-      tap(() => this.sendingData = false),
       map(r => ({
         start: r.extremes.start,
         end: r.extremes.end,
@@ -44,6 +52,11 @@ export class BoardComponent implements OnInit {
     this.showClueInput$ = roundServ.round$.pipe(
       map(r => r.phase === 0 && r.amTeller)
     );
+
+    this.score$ = this.roundServ.round$.pipe(
+      map(
+        r => r.score || null
+      ));
   }
 
   ngOnInit(): void {
@@ -57,6 +70,6 @@ export class BoardComponent implements OnInit {
     this.roundServ.sendClue(this.clueInput);
     this.clueInput = '';
     this.sendingData = true;
+    window.setTimeout(() => { this.sendingData = false; }, 1000);
   }
-
 }

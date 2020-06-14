@@ -3,6 +3,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/database';
 import 'firebase/auth';
 import { BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

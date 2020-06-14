@@ -82,4 +82,8 @@ export class GuessService {
       100, n
     ));
   }
+
+  get value() {
+    return this.optimisticGuess;
+  }
 }

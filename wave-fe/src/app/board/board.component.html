@@ -34,12 +34,16 @@
     <button type="submit" type="button" (click)="sendClue()">Send</button>
 </div>
 
-<div class="board__needle" [ngStyle]="{'transform': 'rotate(' + (rotation$ | async)  + 'turn)'}">
+<div class="board__needle" *ngIf="!(showClueInput$ | async)"
+    [ngStyle]="{'transform': 'rotate(' + (rotation$ | async)  + 'turn)'}">
 </div>
-<div class="board__needle board__needle--true" *ngIf="showClueInput$ | async"
-    [ngStyle]="{'transform': 'rotate(' + (trueValueRotation$ | async)  + 'turn)'}">
+<div class="board__needle board__needle--true" *ngIf="(trueValueRotation$ | async) as trueVal"
+    [ngStyle]="{'transform': 'rotate(' + trueVal  + 'turn)'}">
 </div>
-<div class="board__guess">
+<div class="board__guess" *ngIf="!(showClueInput$ | async)">
     {{guess$ | async}}
+</div>
+<div class="board__score" *ngIf="(score$ | async) as score">
+    You won {{score.score}} points!!!
 </div>
 <app-clues [clues]="clues$ | async"></app-clues>
