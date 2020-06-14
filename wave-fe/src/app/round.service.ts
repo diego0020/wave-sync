@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Subject, BehaviorSubject, ReplaySubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import * as firebase from 'firebase/app';
 import 'firebase/database';
-import { bufferTime, filter, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { AuthService } from './auth.service';
-
+import { AllCards } from './data';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +15,7 @@ export class RoundService {
   private privateAddr = `roundsPrivate/${this.roundId}`;
   private roundRef = firebase.database().ref(this.roundAddr);
   private roundSubject = new ReplaySubject<any>(1);
-  private trueValue: number | null = null;
+  private newRoundData: any = null;
 
   round$ = this.roundSubject.asObservable();
 
@@ -31,7 +30,7 @@ export class RoundService {
   }
 
   resetRound() {
-    const newRoundData = {
+    const placeholderData = {
       phase: 0,
       guessingTeam: 'a',
       teller: this.auth.userSnap.uid,
@@ -42,8 +41,10 @@ export class RoundService {
       guess: 0
     };
 
+    this.newRoundData = null;
+
     const updates = {
-      [this.roundAddr]: newRoundData,
+      [this.roundAddr]: placeholderData,
       [this.guessAddr]: resetGuess
     };
 
@@ -61,12 +62,15 @@ export class RoundService {
       guessingTeam: 'a',
       teller: this.auth.userSnap.uid,
       clue,
-      extremes: { end: 'Easy', start: 'Hard' }
+      extremes: {
+        end: this.newRoundData.end,
+        start: this.newRoundData.start
+      }
     };
 
     const privateData = {
       teller: this.auth.userSnap.uid,
-      truePosition: this.trueValue
+      truePosition: this.newRoundData.value
     };
 
     const updates = {
@@ -74,13 +78,12 @@ export class RoundService {
       [this.privateAddr]: privateData
     };
 
-    console.log(updates);
-
     firebase.database().ref().update(updates,
       (error) => {
         if (error) {
           console.warn(error);
         }
+        this.newRoundData = null;
       });
   }
 
@@ -89,10 +92,24 @@ export class RoundService {
     roundData.amTeller = roundData.teller === this.auth.userSnap.uid;
     roundData.trueValue = null;
 
-    if (roundData.phase === 0 && roundData.amTeller && this.trueValue === null) {
-      this.trueValue = Math.round(Math.random() * 100);
-      roundData.trueValue = this.trueValue;
+    if (roundData.phase === 0 && roundData.amTeller && this.newRoundData === null) {
+      this.newRoundData = this.generateRandData();
+      roundData.trueValue = this.newRoundData.value;
+      roundData.extremes = {
+        start: this.newRoundData.start,
+        end: this.newRoundData.end
+      };
     }
     return roundData;
+  }
+
+  private generateRandData() {
+    const cardIndex = Math.floor(Math.random() * AllCards.length);
+    const card = AllCards[cardIndex];
+    return {
+      value: Math.round(Math.random() * 100),
+      start: card[0],
+      end: card[1],
+    };
   }
 }
