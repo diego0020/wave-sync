@@ -12,10 +12,10 @@ import { map } from 'rxjs/operators';
 })
 export class GameInfoComponent implements OnInit {
   userId$: Observable<any>;
-  phase$: Observable<number>;
+  round$: Observable<any>;
 
   constructor(private round: RoundService, auth: AuthService) {
-    this.phase$ = this.round.phase$;
+    this.round$ = this.round.round$;
     this.userId$ = auth.user$.pipe(
       map(u => u && u.uid)
     );

@@ -43,13 +43,13 @@ Each round consists of 4 phases
             "guessingTeam" : "a",
             "teller" : "$player",
             "clue" : "lion",
-            "extremes" : {"start": "easy to kill", "end": "hard to kill"},
-            "counterGuess" : "left"
+            "extremes" : {"start": "easy to kill", "end": "hard to kill"}
         }
     },
     "guesses": {
         "$roundId": {
-            "guess" : 30
+            "guess" : 30,
+            "counterGuess" : "left"
         }
     },
     "roundsPrivate" : {

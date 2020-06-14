@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-clues',
@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 export class CluesComponent implements OnInit {
 
   constructor() { }
+  @Input() clues: any;
 
   ngOnInit(): void {
   }

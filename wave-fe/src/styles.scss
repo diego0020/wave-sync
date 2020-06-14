@@ -31,6 +31,10 @@ $clues-height: 60px;
         transform-origin: left;
     }
 
+    &__needle--true {
+        background-color: lightgreen;
+    }
+
     &__buttons {
         width: 100px;
         max-width: calc(50vw - 100px);

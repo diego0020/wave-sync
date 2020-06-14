@@ -11,6 +11,7 @@ export class AuthService {
 
   private userSubj = new BehaviorSubject<any>(null);
   user$ = this.userSubj.asObservable();
+  private currUser = null;
 
   constructor() {
     const auth = firebase.auth();
@@ -23,6 +24,12 @@ export class AuthService {
 
     auth.onAuthStateChanged(user => {
       this.userSubj.next(user);
+      this.currUser = user;
     });
+
   }
+  get userSnap() {
+    return { uid: this.currUser.uid };
+  }
+
 }

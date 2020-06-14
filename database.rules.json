@@ -11,7 +11,19 @@
       "$round": {
         ".read": "auth !== null",
         ".write": "auth !== null",
-        ".validate": "newData.hasChildren(['guess']) && newData.child('guess').isNumber() && newData.child('guess').val() >=0 && newData.child('guess').val() <=100"
+        "guess": {
+          ".validate": "newData.isNumber() && newData.val() >=0 && newData.val() <=100"
+        }
+      }
+    },
+    "roundsPrivate": {
+      "$round": {
+        ".read": "root.child('rounds/' + $round + '/phase').val() > 1",
+        ".write": "auth.uid === root.child('rounds/' + $round + '/teller').val() && 0 === root.child('rounds/' + $round + '/phase').val() ",
+        ".validate": "auth.uid === newData.child('teller').val()",
+        "truePosition": {
+          ".validate": "newData.isNumber() && newData.val() >=0 && newData.val() <=100"
+        }
       }
     }
   }
