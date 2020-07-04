@@ -35,13 +35,13 @@
     {{ guess$ | async }}
   </div>
 
-  <div class="board__waiting" *ngIf="waitingForClue$ | async">
-    Waiting for clue
+  <div class="board__waiting" *ngIf="message$ | async as message">
+    {{message}}
   </div>
   <app-clues [clues]="clues$ | async"></app-clues>
 
-  <div class="board__score" *ngIf="score$ | async as score">
-    You won {{ score }} points!!!
+  <div class="board__score" *ngIf="(score$ | async)  as score">
+    You won {{ score.value }} points!!!
   </div>
 
 </div>

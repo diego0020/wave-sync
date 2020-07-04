@@ -14,7 +14,7 @@ export class BoardComponent implements OnInit {
   trueValueRotation$: Observable<number>;
   clues$: Observable<any>;
   score$: Observable<any>;
-  waitingForClue$: Observable<boolean>;
+  message$: Observable<string>;
   showGuessButtons$: Observable<boolean>;
   showClueInput$: Observable<boolean>;
   clueInput = '';
@@ -31,15 +31,23 @@ export class BoardComponent implements OnInit {
         if (r.phase === 0 && r.amTeller) {
           return 0.5 + (r.trueValue / 200);
         }
-        if (r.phase === 4 && r.score) {
+        if (r.phase === 4 && r.score !== undefined) {
           return 0.5 + (r.trueValue / 200);
         }
         return null;
       })
     );
 
-    this.waitingForClue$ = roundService.round$.pipe(
-      map(r => r.phase === 0 && !r.amTeller)
+    this.message$ = roundService.round$.pipe(
+      map(r => {
+        if (r.phase === 0 && !r.amTeller) {
+          return 'Waiting for clue';
+        }
+        if (r.phase === 1 && r.amTeller) {
+          return 'Players are guessing';
+        }
+        return null;
+      })
     );
 
     this.clues$ = roundService.round$.pipe(
@@ -62,7 +70,7 @@ export class BoardComponent implements OnInit {
 
     this.score$ = this.roundService.round$.pipe(
       map(
-        r => r.score || null
+        r => r.score !== undefined ? { value: r.score } : null
       ));
   }
 
