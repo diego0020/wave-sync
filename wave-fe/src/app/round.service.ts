@@ -178,7 +178,7 @@ export class RoundService {
       return;
     }
     if (roundData.phase === 4 && roundData.finalGuess) {
-      if (this.score === null) {
+      if (this.score === null || this.score.id !== roundData.id) {
         this.score = {};
         this.fetchScore(roundData).then(
           roundDataWithScore => this.roundSubject.next(roundDataWithScore)
@@ -189,10 +189,6 @@ export class RoundService {
         this.roundSubject.next(roundData);
         return;
       }
-    }
-    if (roundData.phase === 1) {
-      this.newRoundData = null;
-      this.score = null;
     }
     this.roundSubject.next(roundData);
   }
@@ -219,6 +215,7 @@ export class RoundService {
       .once('value').then(snap => {
         const data = snap.val();
         this.score = {
+          id: roundData.id,
           score: this.calculateScore(finalGuess, data.truePosition),
           trueValue: data.truePosition,
           finalGuess
