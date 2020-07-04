@@ -1,49 +1,61 @@
-<ng-container *ngIf="showGuessButtons$ | async">
+<div class="board__inner">
+  <ng-container *ngIf="showGuessButtons$ | async">
     <div class="board__buttons board__buttons-decrease">
-        <button class="board__button" (click)="moveNeedle(-1)">
-            -1
-        </button>
-
-        <button class="board__button" (click)="moveNeedle(-2)">
-            -2
-        </button>
-
-        <button class="board__button" (click)="moveNeedle(-5)">
-            -5
-        </button>
+      <button class="board__button" (click)="moveNeedle(-1)">-1</button>
+      <button class="board__button" (click)="moveNeedle(-2)">-2</button>
+      <button class="board__button" (click)="moveNeedle(-5)">-5</button>
     </div>
 
     <div class="board__buttons board__buttons-increase">
-        <button class="board__button" (click)="moveNeedle(1)">
-            +1
-        </button>
-
-        <button class="board__button" (click)="moveNeedle(2)">
-            +2
-        </button>
-
-        <button class="board__button" (click)="moveNeedle(5)">
-            +5
-        </button>
+      <button class="board__button" (click)="moveNeedle(1)">+1</button>
+      <button class="board__button" (click)="moveNeedle(2)">+2</button>
+      <button class="board__button" (click)="moveNeedle(5)">+5</button>
     </div>
-</ng-container>
+  </ng-container>
 
-<div *ngIf="showClueInput$ | async">
-    <label>Choose a clue:</label>
-    <input [(ngModel)]="clueInput" maxlength="20" minlength="1" type="text">
-    <button type="submit" type="button" (click)="sendClue()">Send</button>
-</div>
+  <form
+    (ngSubmit)="sendClue($event)"
+    *ngIf="showClueInput$ | async"
+    autocomplete="off"
+    class="ml-2"
+  >
+    <div class="ml-1 mb-2">
+      <label>Enter the Clue:</label>
+    </div>
 
-<div class="board__needle" *ngIf="!(showClueInput$ | async)"
-    [ngStyle]="{'transform': 'rotate(' + (rotation$ | async)  + 'turn)'}">
+    <input
+      class="form-input mx-1"
+      name="clueInput"
+      [(ngModel)]="clueInput"
+      maxlength="20"
+      minlength="1"
+      type="text"
+    />
+
+    <button class="btn" type="submit" type="button" (click)="sendClue($event)">
+      Send
+    </button>
+  </form>
+
+  <div
+    class="board__needle"
+    *ngIf="!(showClueInput$ | async)"
+    [ngStyle]="{ transform: 'rotate(' + (rotation$ | async) + 'turn)' }"
+  ></div>
+
+  <div
+    class="board__needle board__needle--true"
+    *ngIf="trueValueRotation$ | async as trueVal"
+    [ngStyle]="{ transform: 'rotate(' + trueVal + 'turn)' }"
+  ></div>
+
+  <div class="board__guess" *ngIf="!(showClueInput$ | async)">
+    {{ guess$ | async }}
+  </div>
+
+  <div class="board__score" *ngIf="score$ | async as score">
+    You won {{ score.score }} points!!!
+  </div>
+
+  <app-clues [clues]="clues$ | async"></app-clues>
 </div>
-<div class="board__needle board__needle--true" *ngIf="(trueValueRotation$ | async) as trueVal"
-    [ngStyle]="{'transform': 'rotate(' + trueVal  + 'turn)'}">
-</div>
-<div class="board__guess" *ngIf="!(showClueInput$ | async)">
-    {{guess$ | async}}
-</div>
-<div class="board__score" *ngIf="(score$ | async) as score">
-    You won {{score.score}} points!!!
-</div>
-<app-clues [clues]="clues$ | async"></app-clues>

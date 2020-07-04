@@ -1,7 +1,11 @@
-<button (click)="sendGuess()" [disabled]="throttled || (disableSend$ | async)">
-    Send guess
+<button
+  class="btn ml-4"
+  (click)="sendGuess()"
+  [disabled]="throttled || (disableSend$ | async)"
+>
+  Send Hint
 </button>
 
-<button (click)="reset()" [disabled]="throttled">
-    Restart round
+<button class="btn mr-4" (click)="reset()" [disabled]="throttled">
+  Restart round
 </button>

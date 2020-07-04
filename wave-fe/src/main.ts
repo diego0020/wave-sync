@@ -7,6 +7,7 @@ import { environment } from './environments/environment';
 import * as firebase from 'firebase/app';
 import 'firebase/analytics';
 
+import 'focus-visible';
 
 if (environment.production) {
   enableProdMode();
