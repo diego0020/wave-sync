@@ -10,7 +10,7 @@
     "guesses": {
       "$round": {
         ".read": "auth !== null",
-        ".write": "auth !== null && (root.child('rounds/' + $round + '/phase').val() < 2 || newData.child('guess').val() === 0) ",
+        ".write": "auth !== null && (newData.child('guess').val() === 0 || root.child('rounds/' + $round + '/phase').val() < 2 ) ",
         "guess": {
           ".validate": "newData.isNumber() && newData.val() >=0 && newData.val() <=100"
         }

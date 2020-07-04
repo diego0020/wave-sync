@@ -24,7 +24,7 @@ export class ActionsComponent implements OnInit {
   }
 
   reset() {
-    this.roundService.resetRound();
+    this.roundService.startNewRound();
     this.throttle();
   }
 

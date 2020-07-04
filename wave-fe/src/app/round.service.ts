@@ -47,9 +47,26 @@ export class RoundService {
   constructor(private auth: AuthService) {
     this.auth.user$.subscribe(
       user => {
-        this.roundRef.on('value', (snapshot) => {
-          const roundData = snapshot.val();
-          this.procRoundData(roundData);
+
+        const lastRoundsRef = firebase.database()
+          .ref('rounds').orderByKey().limitToLast(1).endAt('testRounc');
+
+        lastRoundsRef.on('child_added', snap => {
+          // new round started
+          const v = snap.val();
+          const k = snap.key;
+          this.roundId = k;
+          this.roundAddr = `rounds/${this.roundId}`;
+          this.guessAddr = `guesses/${this.roundId}`;
+          this.privateAddr = `roundsPrivate/${this.roundId}`;
+          if (this.roundRef) {
+            this.roundRef.off();
+          }
+          this.roundRef = firebase.database().ref(this.roundAddr);
+          this.roundRef.on('value', (snapshot) => {
+            const roundData = snapshot.val();
+            this.procRoundData(roundData);
+          });
         });
       }
     );
@@ -67,7 +84,7 @@ export class RoundService {
     };
   }
 
-  resetRound() {
+  startNewRound() {
     const placeholderData = {
       phase: 0,
       guessingTeam: 'a',
@@ -87,9 +104,18 @@ export class RoundService {
 
     this.newRoundData = null;
 
+
+    const newRoundRef = firebase.database()
+      .ref('rounds').push();
+
+    const newRoundId = newRoundRef.key;
+
+    const newRoundAddr = `rounds/${newRoundId}`;
+    const newGuessAdrr = `guesses/${newRoundId}`;
+
     const updates = {
-      [this.roundAddr]: placeholderData,
-      [this.guessAddr]: resetGuess
+      [newRoundAddr]: placeholderData,
+      [newGuessAdrr]: resetGuess
     };
 
     firebase.database().ref().update(updates,
