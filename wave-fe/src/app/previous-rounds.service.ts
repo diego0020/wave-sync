@@ -38,7 +38,7 @@ export class PreviousRoundsService {
         const round = rawHistory[k];
         return {
           clue: round.clue,
-          score: round.score,
+          score: round.score || 0,
           start: round.extremes.start,
           end: round.extremes.end
         };

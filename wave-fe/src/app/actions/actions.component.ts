@@ -12,11 +12,24 @@ import { GuessService } from '../guess.service';
 })
 export class ActionsComponent implements OnInit {
   throttled = false;
-  disableSend$: Observable<boolean>;
+  showSend$: Observable<boolean>;
+  skipMessage$: Observable<string>;
 
   constructor(private roundService: RoundService, private guessService: GuessService) {
-    this.disableSend$ = this.roundService.round$.pipe(
-      map(round => (round.phase !== 1) || round.amTeller)
+    this.showSend$ = this.roundService.round$.pipe(
+      map(round => round.phase === 1 && !round.amTeller)
+    );
+
+    this.skipMessage$ = this.roundService.round$.pipe(
+      map(round => {
+        if (round.phase > 2) {
+          return 'Next Round';
+        }
+        if (round.phase > 0 && round.amTeller) {
+          return 'Skip Round';
+        }
+        return null;
+      })
     );
   }
 

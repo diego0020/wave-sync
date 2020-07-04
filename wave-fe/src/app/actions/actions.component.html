@@ -1,11 +1,7 @@
-<button
-  class="btn ml-4"
-  (click)="sendGuess()"
-  [disabled]="throttled || (disableSend$ | async)"
->
-  Send Hint
+<button *ngIf="skipMessage$ | async as msg" class="btn skip" (click)="reset()" [disabled]="throttled">
+  {{msg}}
 </button>
 
-<button class="btn mr-4" (click)="reset()" [disabled]="throttled">
-  Restart round
+<button *ngIf="showSend$ | async" class="btn send" (click)="sendGuess()" [disabled]="throttled ">
+  Send Guess
 </button>
