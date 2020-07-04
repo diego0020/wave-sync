@@ -9,7 +9,7 @@ export const randomItem = (list: any[]): any => {
   const item = list[idx];
 
   if (previousItem === item) {
-    return randomItem(list);
+    return list[(idx + 1) % list.length];
   }
 
   previousItem = item;

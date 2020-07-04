@@ -5,7 +5,6 @@ import * as firebase from 'firebase/app';
 import 'firebase/database';
 import { AuthService } from './auth.service';
 import { AllCards } from './data';
-import { GuessService } from './guess.service';
 import { randomItem } from './helpers';
 
 interface RoundData {
@@ -50,9 +49,7 @@ export class RoundService {
       user => {
         this.roundRef.on('value', (snapshot) => {
           const roundData = snapshot.val();
-          this.roundSubject.next(
-            this.procRoundData(roundData)
-          );
+          this.procRoundData(roundData);
         });
       }
     );
@@ -151,23 +148,30 @@ export class RoundService {
         end: this.newRoundData.end,
         endColor: this.newRoundData.endColor,
       };
+      this.roundSubject.next(roundData);
+      return;
     }
     if (roundData.phase === 4 && roundData.finalGuess) {
       if (this.score === null) {
-        this.getScore(roundData);
+        this.score = {};
+        this.fetchScore(roundData).then(
+          roundDataWithScore => this.roundSubject.next(roundDataWithScore)
+        );
+        return;
       } else {
         roundData.score = this.score;
+        this.roundSubject.next(roundData);
+        return;
       }
     }
     if (roundData.phase === 1) {
       this.newRoundData = null;
       this.score = null;
     }
-
-    return roundData;
+    this.roundSubject.next(roundData);
   }
 
-  sendGuess(finalGuess) {
+  sendFinalGuess(finalGuess) {
 
     const updates = {
       [this.guessAddr + '/guess']: finalGuess,
@@ -183,10 +187,10 @@ export class RoundService {
       });
   }
 
-  private getScore(roundData) {
+  private fetchScore(roundData) {
     const finalGuess = roundData.finalGuess;
-    firebase.database().ref(this.privateAddr)
-      .once('value', snap => {
+    return firebase.database().ref(this.privateAddr)
+      .once('value').then(snap => {
         const data = snap.val();
         this.score = {
           score: this.calculateScore(finalGuess, data.truePosition),
@@ -194,7 +198,7 @@ export class RoundService {
           finalGuess
         };
         roundData.score = this.score;
-        this.roundSubject.next(roundData);
+        return roundData;
       });
   }
 
