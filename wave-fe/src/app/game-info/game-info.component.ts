@@ -14,8 +14,8 @@ export class GameInfoComponent implements OnInit {
   userId$: Observable<any>;
   round$: Observable<any>;
 
-  constructor(private round: RoundService, auth: AuthService) {
-    this.round$ = this.round.round$;
+  constructor(private roundService: RoundService, auth: AuthService) {
+    this.round$ = this.roundService.round$;
     this.userId$ = auth.user$.pipe(
       map(u => u && u.uid)
     );

@@ -1,11 +1,23 @@
 <div class="clues">
-    <div class="clues__card clues__low">
-        {{clues?.start}}
-    </div>
-    <div class="clues__card clues__target">
-        {{clues?.target}}
-    </div>
-    <div class="clues__card clues__high">
-        {{clues?.end}}
-    </div>
+  <button
+    class="clues__card clues__card--lower text-transparent"
+    [ngClass]="startClasses"
+    (click)="moveNeedle(-5)"
+    [disabled]="!(isGuestPlayer$ | async)"
+  >
+    <span class="text-black">{{ clues?.start }}</span>
+  </button>
+
+  <div class="clues__target">
+    <span>{{ clues?.target }}</span>
+  </div>
+
+  <button
+    class="clues__card clues__card--higher text-transparent"
+    [ngClass]="endClasses"
+    (click)="moveNeedle(5)"
+    [disabled]="!(isGuestPlayer$ | async)"
+  >
+    <span class="text-black">{{ clues?.end }}</span>
+  </button>
 </div>

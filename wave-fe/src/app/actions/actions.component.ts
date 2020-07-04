@@ -13,8 +13,8 @@ export class ActionsComponent implements OnInit {
   throttled = false;
   disableSend$: Observable<boolean>;
 
-  constructor(private roundServ: RoundService) {
-    this.disableSend$ = this.roundServ.round$.pipe(
+  constructor(private roundService: RoundService) {
+    this.disableSend$ = this.roundService.round$.pipe(
       map(round => (round.phase !== 1) || round.amTeller)
     );
   }
@@ -23,12 +23,12 @@ export class ActionsComponent implements OnInit {
   }
 
   reset() {
-    this.roundServ.resetRound();
+    this.roundService.resetRound();
     this.throttle();
   }
 
   sendGuess() {
-    this.roundServ.sendGuess();
+    this.roundService.sendGuess();
     this.throttle();
   }
 

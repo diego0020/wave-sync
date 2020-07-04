@@ -1,10 +1,20 @@
 import { Injectable } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import * as firebase from 'firebase/app';
 import 'firebase/database';
 import { AuthService } from './auth.service';
 import { AllCards } from './data';
 import { GuessService } from './guess.service';
+import { randomItem } from './helpers';
+
+interface RoundData {
+  start: string;
+  startColor: string;
+  end: string;
+  endColor: string;
+  value: number;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -16,20 +26,45 @@ export class RoundService {
   private privateAddr = `roundsPrivate/${this.roundId}`;
   private roundRef = firebase.database().ref(this.roundAddr);
   private roundSubject = new ReplaySubject<any>(1);
-  private newRoundData: any = null;
   private score: any = null;
+  private newRoundData: RoundData = null;
+
+  private colors = [
+    'blue',
+    'green',
+    'indigo',
+    'orange',
+    'purple',
+    'red',
+    'teal',
+  ];
 
   round$ = this.roundSubject.asObservable();
 
-  constructor(private auth: AuthService, private guessServ: GuessService) {
+  isGuestPlayer$ = this.round$.pipe(
+    map(r => r.phase === 1 && !r.amTeller)
+  );
 
+  constructor(private auth: AuthService, private guessService: GuessService) {
     this.roundRef.on('value', (snapshot) => {
       const roundData = snapshot.val();
-      console.log(roundData, 'roundd ata');
+      console.log(roundData, 'round data');
       this.roundSubject.next(
         this.procRoundData(roundData)
       );
     });
+  }
+
+  private generateRandData(): RoundData {
+    const cardIndex = Math.floor(Math.random() * AllCards.length);
+    const card = AllCards[cardIndex];
+    return {
+      value: Math.round(Math.random() * 100),
+      start: card[0],
+      startColor: randomItem(this.colors),
+      end: card[1],
+      endColor: randomItem(this.colors),
+    };
   }
 
   resetRound() {
@@ -38,7 +73,12 @@ export class RoundService {
       guessingTeam: 'a',
       teller: this.auth.userSnap.uid,
       clue: '...',
-      extremes: { end: '.', start: '.' },
+      extremes: {
+        end: '.',
+        endColor: '',
+        start: '.',
+        startColor: ''
+      },
       finalGuess: null,
     };
     const resetGuess = {
@@ -68,7 +108,9 @@ export class RoundService {
       clue,
       extremes: {
         end: this.newRoundData.end,
-        start: this.newRoundData.start
+        start: this.newRoundData.start,
+        endColor: this.newRoundData.endColor,
+        startColor: this.newRoundData.startColor,
       }
     };
 
@@ -91,7 +133,7 @@ export class RoundService {
       });
   }
 
-  private procRoundData(rawData) {
+  private procRoundData(rawData): RoundData {
     const roundData = { ...rawData };
     roundData.amTeller = roundData.teller === this.auth.userSnap.uid;
     roundData.trueValue = null;
@@ -101,7 +143,9 @@ export class RoundService {
       roundData.trueValue = this.newRoundData.value;
       roundData.extremes = {
         start: this.newRoundData.start,
-        end: this.newRoundData.end
+        startColor: this.newRoundData.startColor,
+        end: this.newRoundData.end,
+        endColor: this.newRoundData.endColor,
       };
     }
     if (roundData.phase === 4 && roundData.finalGuess) {
@@ -119,18 +163,8 @@ export class RoundService {
     return roundData;
   }
 
-  private generateRandData() {
-    const cardIndex = Math.floor(Math.random() * AllCards.length);
-    const card = AllCards[cardIndex];
-    return {
-      value: Math.round(Math.random() * 100),
-      start: card[0],
-      end: card[1],
-    };
-  }
-
   sendGuess() {
-    const finalGuess = this.guessServ.value;
+    const finalGuess = this.guessService.value;
 
     const updates = {
       [this.guessAddr + '/guess']: finalGuess,

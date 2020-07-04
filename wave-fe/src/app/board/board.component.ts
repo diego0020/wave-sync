@@ -19,13 +19,13 @@ export class BoardComponent implements OnInit {
   clueInput = '';
   sendingData = false;
 
-  constructor(private guessServ: GuessService, private roundServ: RoundService) {
-    this.guess$ = guessServ.guess$;
+  constructor(private guessService: GuessService, private roundService: RoundService) {
+    this.guess$ = guessService.guess$;
     this.rotation$ = this.guess$.pipe(
       map(n => 0.5 + (n / 200))
     );
 
-    this.trueValueRotation$ = roundServ.round$.pipe(
+    this.trueValueRotation$ = roundService.round$.pipe(
       map(r => {
         if (r.phase === 0) {
           return 0.5 + (r.trueValue / 200);
@@ -37,23 +37,25 @@ export class BoardComponent implements OnInit {
       })
     );
 
-    this.clues$ = roundServ.round$.pipe(
+    this.clues$ = roundService.round$.pipe(
       map(r => ({
+        startColor: r.extremes.startColor,
         start: r.extremes.start,
         end: r.extremes.end,
+        endColor: r.extremes.endColor,
         target: r.clue
       })),
     );
 
-    this.showGuessButtons$ = roundServ.round$.pipe(
+    this.showGuessButtons$ = roundService.round$.pipe(
       map(r => r.phase === 1 && !r.amTeller)
     );
 
-    this.showClueInput$ = roundServ.round$.pipe(
+    this.showClueInput$ = roundService.round$.pipe(
       map(r => r.phase === 0 && r.amTeller)
     );
 
-    this.score$ = this.roundServ.round$.pipe(
+    this.score$ = this.roundService.round$.pipe(
       map(
         r => r.score || null
       ));
@@ -63,11 +65,12 @@ export class BoardComponent implements OnInit {
   }
 
   moveNeedle(delta: number) {
-    this.guessServ.moveNeedle(delta);
+    this.guessService.moveNeedle(delta);
   }
 
-  sendClue() {
-    this.roundServ.sendClue(this.clueInput);
+  sendClue($event) {
+    $event.preventDefault();
+    this.roundService.sendClue(this.clueInput);
     this.clueInput = '';
     this.sendingData = true;
     window.setTimeout(() => { this.sendingData = false; }, 1000);
