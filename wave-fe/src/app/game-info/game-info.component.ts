@@ -14,12 +14,14 @@ import { PreviousRoundsService } from '../previous-rounds.service';
 export class GameInfoComponent implements OnInit {
   userId$: Observable<any>;
   round$: Observable<any>;
+  history$: Observable<any[]>;
 
   constructor(private roundService: RoundService, auth: AuthService, private previousRondService: PreviousRoundsService) {
     this.round$ = this.roundService.round$;
     this.userId$ = auth.user$.pipe(
       map(u => u && u.uid)
     );
+    this.history$ = previousRondService.history$;
   }
 
   ngOnInit(): void {

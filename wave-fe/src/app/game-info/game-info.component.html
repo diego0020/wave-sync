@@ -1,7 +1,16 @@
-<div class="m-4">
+<div class="m-2">
   <p>User: <strong>{{ userId$ | async | slice: 0:8 }}</strong></p>
   <ng-container *ngIf="round$ | async as round">
     <p>Teller: <strong>{{ round.teller | slice: 0:8 }}</strong></p>
     <p>Phase: {{ round.phase }}</p>
   </ng-container>
+
+  <div class="history">
+    <h2>History</h2>
+    <ul>
+      <li *ngFor="let r of (history$ | async)" title="{{r.start}}-{{r.end}}">
+        {{r.clue}} : {{r.score}}
+      </li>
+    </ul>
+  </div>
 </div>
