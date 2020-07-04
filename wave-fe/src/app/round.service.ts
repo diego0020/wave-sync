@@ -45,14 +45,17 @@ export class RoundService {
     map(r => r.phase === 1 && !r.amTeller)
   );
 
-  constructor(private auth: AuthService, private guessService: GuessService) {
-    this.roundRef.on('value', (snapshot) => {
-      const roundData = snapshot.val();
-      console.log(roundData, 'round data');
-      this.roundSubject.next(
-        this.procRoundData(roundData)
-      );
-    });
+  constructor(private auth: AuthService) {
+    this.auth.user$.subscribe(
+      user => {
+        this.roundRef.on('value', (snapshot) => {
+          const roundData = snapshot.val();
+          this.roundSubject.next(
+            this.procRoundData(roundData)
+          );
+        });
+      }
+    );
   }
 
   private generateRandData(): RoundData {
@@ -137,6 +140,7 @@ export class RoundService {
     const roundData = { ...rawData };
     roundData.amTeller = roundData.teller === this.auth.userSnap.uid;
     roundData.trueValue = null;
+    roundData.id = this.roundId;
 
     if (roundData.phase === 0 && roundData.amTeller && this.newRoundData === null) {
       this.newRoundData = this.generateRandData();
@@ -163,8 +167,7 @@ export class RoundService {
     return roundData;
   }
 
-  sendGuess() {
-    const finalGuess = this.guessService.value;
+  sendGuess(finalGuess) {
 
     const updates = {
       [this.guessAddr + '/guess']: finalGuess,

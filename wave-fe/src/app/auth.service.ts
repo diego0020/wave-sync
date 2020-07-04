@@ -2,15 +2,14 @@ import { Injectable } from '@angular/core';
 import * as firebase from 'firebase/app';
 import 'firebase/database';
 import 'firebase/auth';
-import { BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private userSubj = new BehaviorSubject<any>(null);
+  private userSubj = new ReplaySubject<any>();
   user$ = this.userSubj.asObservable();
   private currUser = null;
 
@@ -24,8 +23,8 @@ export class AuthService {
     });
 
     auth.onAuthStateChanged(user => {
-      this.userSubj.next(user);
       this.currUser = user;
+      this.userSubj.next(user);
     });
 
   }

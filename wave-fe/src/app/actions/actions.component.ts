@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RoundService } from '../round.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { GuessService } from '../guess.service';
 
 @Component({
   selector: 'app-actions',
@@ -13,7 +14,7 @@ export class ActionsComponent implements OnInit {
   throttled = false;
   disableSend$: Observable<boolean>;
 
-  constructor(private roundService: RoundService) {
+  constructor(private roundService: RoundService, private guessService: GuessService) {
     this.disableSend$ = this.roundService.round$.pipe(
       map(round => (round.phase !== 1) || round.amTeller)
     );
@@ -28,7 +29,7 @@ export class ActionsComponent implements OnInit {
   }
 
   sendGuess() {
-    this.roundService.sendGuess();
+    this.guessService.sendFinalGuess();
     this.throttle();
   }
 
