@@ -41,7 +41,7 @@
   <app-clues [clues]="clues$ | async"></app-clues>
 
   <div class="board__score" *ngIf="score$ | async as score">
-    You won {{ score.score }} points!!!
+    You won {{ score }} points!!!
   </div>
 
 </div>

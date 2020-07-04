@@ -2,9 +2,9 @@
   /* Visit https://firebase.google.com/docs/database/security to learn more about security rules. */
   "rules": {
     "rounds": {
+      ".read": "auth !== null",
       "$round": {
-        ".read": "auth !== null",
-        ".write": "auth !== null"
+        ".write": "auth !== null && (!newData.child('score').exists() || newData.child('phase').val() === 4)",
       }
     },
     "guesses": {

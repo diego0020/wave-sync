@@ -25,7 +25,6 @@ export class RoundService {
   private privateAddr = `roundsPrivate/${this.roundId}`;
   private roundRef = firebase.database().ref(this.roundAddr);
   private roundSubject = new ReplaySubject<any>(1);
-  private score: any = null;
   private newRoundData: RoundData = null;
 
   private colors = [
@@ -159,10 +158,9 @@ export class RoundService {
       });
   }
 
-  private procRoundData(rawData): RoundData {
+  private procRoundData(rawData): void {
     const roundData = { ...rawData };
     roundData.amTeller = roundData.teller === this.auth.userSnap.uid;
-    roundData.trueValue = null;
     roundData.id = this.roundId;
 
     if (roundData.phase === 0 && roundData.amTeller && this.newRoundData === null) {
@@ -174,21 +172,6 @@ export class RoundService {
         end: this.newRoundData.end,
         endColor: this.newRoundData.endColor,
       };
-      this.roundSubject.next(roundData);
-      return;
-    }
-    if (roundData.phase === 4 && roundData.finalGuess) {
-      if (this.score === null || this.score.id !== roundData.id) {
-        this.score = {};
-        this.fetchScore(roundData).then(
-          roundDataWithScore => this.roundSubject.next(roundDataWithScore)
-        );
-        return;
-      } else {
-        roundData.score = this.score;
-        this.roundSubject.next(roundData);
-        return;
-      }
     }
     this.roundSubject.next(roundData);
   }
@@ -205,27 +188,34 @@ export class RoundService {
       (error) => {
         if (error) {
           console.warn(error);
+        } else {
+          this.saveScore(finalGuess);
         }
       });
   }
 
-  private fetchScore(roundData) {
-    const finalGuess = roundData.finalGuess;
+  private saveScore(finalGuess) {
     return firebase.database().ref(this.privateAddr)
       .once('value').then(snap => {
         const data = snap.val();
-        this.score = {
-          id: roundData.id,
-          score: this.calculateScore(finalGuess, data.truePosition),
-          trueValue: data.truePosition,
-          finalGuess
+        const score = this.calculateScore(finalGuess, data.truePosition);
+        const scoreAddr = this.roundAddr + '/score';
+        const trueValueAddr = this.roundAddr + '/trueValue';
+        const updates = {
+          [trueValueAddr]: data.truePosition,
+          [scoreAddr]: score
         };
-        roundData.score = this.score;
-        return roundData;
+        firebase.database().ref().update(
+          updates,
+          (error) => {
+            if (error) {
+              console.error(error, 'could not save score');
+            }
+          });
       });
   }
 
-  private calculateScore(a: number, b: number) {
+  calculateScore(a: number, b: number) {
     const diff = Math.abs(a - b);
     if (diff < 10) {
       return 10;

@@ -32,7 +32,7 @@ export class BoardComponent implements OnInit {
           return 0.5 + (r.trueValue / 200);
         }
         if (r.phase === 4 && r.score) {
-          return 0.5 + (r.score.trueValue / 200);
+          return 0.5 + (r.trueValue / 200);
         }
         return null;
       })

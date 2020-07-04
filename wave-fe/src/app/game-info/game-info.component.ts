@@ -3,6 +3,7 @@ import { RoundService } from '../round.service';
 import { Observable } from 'rxjs';
 import { AuthService } from '../auth.service';
 import { map } from 'rxjs/operators';
+import { PreviousRoundsService } from '../previous-rounds.service';
 
 @Component({
   selector: 'app-game-info',
@@ -14,7 +15,7 @@ export class GameInfoComponent implements OnInit {
   userId$: Observable<any>;
   round$: Observable<any>;
 
-  constructor(private roundService: RoundService, auth: AuthService) {
+  constructor(private roundService: RoundService, auth: AuthService, private previousRondService: PreviousRoundsService) {
     this.round$ = this.roundService.round$;
     this.userId$ = auth.user$.pipe(
       map(u => u && u.uid)
