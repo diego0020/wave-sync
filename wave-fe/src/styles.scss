@@ -64,7 +64,6 @@ body {
 
   &::before {
     content: "";
-    // background-color: darken($game-bg, 3%);
     background-color: $game-bg;
     border-top-left-radius: 110%;
     border-top-right-radius: 110%;
@@ -192,8 +191,6 @@ body {
   &__button {
     background-color: darken($game-bg, 5%);
     @apply rounded mx-1 p-2;
-    // @apply mx-1;
-    // @apply p-2;
   }
 
   &__guess {
@@ -294,11 +291,6 @@ body {
     border-color: darken($target-card-bg, 5%);
     color: lighten($game-bg, 40%);
     @apply border flex mx-2 px-2 py-2 rounded;
-    // @apply flex;
-    // @apply mx-2;
-    // @apply px-2;
-    // @apply py-2;
-    // @apply rounded;
     align-items: center;
     height: theme('spacing.24');
     justify-content: center;

@@ -8,6 +8,14 @@ import { AllCards } from './data';
 import { GuessService } from './guess.service';
 import { randomItem } from './helpers';
 
+interface RoundData {
+  start: string;
+  startColor: string;
+  end: string;
+  endColor: string;
+  value: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -19,13 +27,8 @@ export class RoundService {
   private roundRef = firebase.database().ref(this.roundAddr);
   private roundSubject = new ReplaySubject<any>(1);
   private score: any = null;
-  private newRoundData: {
-    start: string,
-    startColor: string,
-    end: string,
-    endColor: string,
-    value: number,
-  } = null;
+  private newRoundData: RoundData = null;
+
   private colors = [
     'blue',
     'green',
@@ -40,7 +43,7 @@ export class RoundService {
 
   isGuestPlayer$ = this.round$.pipe(
     map(r => r.phase === 1 && !r.amTeller)
-  )
+  );
 
   constructor(private auth: AuthService, private guessService: GuessService) {
     this.roundRef.on('value', (snapshot) => {
@@ -52,7 +55,7 @@ export class RoundService {
     });
   }
 
-  private generateRandData() {
+  private generateRandData(): RoundData {
     const cardIndex = Math.floor(Math.random() * AllCards.length);
     const card = AllCards[cardIndex];
     return {
@@ -130,7 +133,7 @@ export class RoundService {
       });
   }
 
-  private procRoundData(rawData) {
+  private procRoundData(rawData): RoundData {
     const roundData = { ...rawData };
     roundData.amTeller = roundData.teller === this.auth.userSnap.uid;
     roundData.trueValue = null;

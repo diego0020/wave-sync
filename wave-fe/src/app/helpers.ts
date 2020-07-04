@@ -14,4 +14,4 @@ export const randomItem = (list: any[]): any => {
 
   previousItem = item;
   return item;
-}
+};

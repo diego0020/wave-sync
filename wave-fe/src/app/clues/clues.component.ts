@@ -9,18 +9,18 @@ import { RoundService } from '../round.service';
 })
 export class CluesComponent implements OnInit {
   @Input() clues: any;
-  isGuestPlayer$: Observable<boolean>
+  isGuestPlayer$: Observable<boolean>;
 
   constructor(private guessService: GuessService, private roundService: RoundService) {
     this.isGuestPlayer$ = roundService.isGuestPlayer$;
   }
 
-  get startClasses() {
+  get startClasses(): string {
     const color = this.clues?.startColor;
     return `bg-${color}-400 text-${color}-400`;
   }
 
-  get endClasses() {
+  get endClasses(): string {
     const color = this.clues?.endColor;
     return `bg-${color}-400 text-${color}-400`;
   }
