@@ -4,7 +4,7 @@
     "rounds": {
       ".read": "auth !== null",
       "$round": {
-        ".write": "auth !== null && (!newData.child('score').exists() || newData.child('phase').val() === 4) &&(!newData.child('cloudScore').exists())",
+        ".write": "auth !== null && (!newData.child('score').exists() || newData.child('phase').val() === 4) &&(!newData.child('cloudScore').exists())"
       }
     },
     "guesses": {
