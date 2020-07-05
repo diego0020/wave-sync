@@ -27,7 +27,6 @@ export class GuessService {
       round => {
         if (round.id !== this.roundId) {
           this.roundId = round.id;
-          console.log(round);
           if (this.guessRef) {
             this.guessRef.off();
           }

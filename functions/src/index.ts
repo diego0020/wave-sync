@@ -22,6 +22,11 @@ exports.writeScore = functions.database.ref('/finalGuesses/{roundId}')
                 const score = calculateScore(finalGuess, trueValue);
                 functions.logger.log("this is the snap:", k, values);
                 // return app.database().ref().set(99);
-                return root.child('rounds').child(k).child('cloudScore').set(score);
+                return Promise.all(
+                    [root.child('rounds').child(k).child('cloudScore').set(score),
+                    root.child('rounds').child(k).child('score').set(score),
+                    root.child('rounds').child(k).child('trueValue').set(trueValue),
+                    ]
+                );
             });
     });

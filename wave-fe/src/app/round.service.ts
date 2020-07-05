@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 import * as firebase from 'firebase/app';
 import 'firebase/database';
 import { AuthService } from './auth.service';
-import { AllCards } from './data';
+import { EasyCards } from './data';
 import { randomItem } from './helpers';
 
 interface RoundData {
@@ -72,8 +72,9 @@ export class RoundService {
   }
 
   private generateRandData(): RoundData {
-    const cardIndex = Math.floor(Math.random() * AllCards.length);
-    const card = AllCards[cardIndex];
+    const cards = EasyCards;
+    const cardIndex = Math.floor(Math.random() * cards.length);
+    const card = cards[cardIndex];
     return {
       value: Math.round(Math.random() * 100),
       start: card[0],
@@ -207,8 +208,8 @@ export class RoundService {
       .once('value').then(snap => {
         const data = snap.val();
         const score = this.calculateScore(finalGuess, data.truePosition);
-        const scoreAddr = this.roundAddr + '/score';
-        const trueValueAddr = this.roundAddr + '/trueValue';
+        const scoreAddr = this.roundAddr + '/clientScore';
+        const trueValueAddr = this.roundAddr + '/clientTrueValue';
 
         const updates = {
           [trueValueAddr]: data.truePosition,

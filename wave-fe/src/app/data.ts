@@ -259,3 +259,5 @@ const AdvancedSpectrumCards: [string, string][] = [
 ];
 
 export const AllCards = [...SpectrumCards, ...AdvancedSpectrumCards];
+export const EasyCards = SpectrumCards;
+export const HardCards = AdvancedSpectrumCards;
