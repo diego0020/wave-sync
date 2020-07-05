@@ -25,5 +25,3 @@ exports.writeScore = functions.database.ref('/finalGuesses/{roundId}')
                 return root.child('rounds').child(k).child('cloudScore').set(score);
             });
     });
-
-

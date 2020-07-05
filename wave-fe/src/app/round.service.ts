@@ -178,10 +178,18 @@ export class RoundService {
 
   sendFinalGuess(finalGuess) {
 
+    const finalGuessAddr = 'finalGuesses/' + this.roundId;
+    const finalGuessData = {
+      value: finalGuess,
+      user: this.auth.userSnap.uid,
+      timestamp: firebase.database.ServerValue.TIMESTAMP
+    };
+
     const updates = {
       [this.guessAddr + '/guess']: finalGuess,
       [this.roundAddr + '/phase']: 4,
       [this.roundAddr + '/finalGuess']: finalGuess,
+      [finalGuessAddr]: finalGuessData,
     };
 
     firebase.database().ref().update(updates,
@@ -201,9 +209,10 @@ export class RoundService {
         const score = this.calculateScore(finalGuess, data.truePosition);
         const scoreAddr = this.roundAddr + '/score';
         const trueValueAddr = this.roundAddr + '/trueValue';
+
         const updates = {
           [trueValueAddr]: data.truePosition,
-          [scoreAddr]: score
+          [scoreAddr]: score,
         };
         firebase.database().ref().update(
           updates,
