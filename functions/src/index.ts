@@ -2,10 +2,13 @@ import * as functions from 'firebase-functions';
 
 function calculateScore(a: number, b: number) {
     const diff = Math.abs(a - b);
-    if (diff < 10) {
-        return 10;
-    } else if (diff < 20) {
-        return 5;
+    if (diff < 6) {
+        return 4;
+    } else if (diff < 12) {
+        return 3;
+    }
+    else if (diff < 18) {
+        return 2;
     }
     return 0;
 }
@@ -21,12 +24,12 @@ exports.writeScore = functions.database.ref('/finalGuesses/{roundId}')
                 const trueValue = trueValueSnap.val();
                 const score = calculateScore(finalGuess, trueValue);
                 functions.logger.log("this is the snap:", k, values);
+                const updates = {
+                    [`rounds/${k}/cloudScore`]: score,
+                    [`rounds/${k}/score`]: score,
+                    [`rounds/${k}/trueValue`]: trueValue,
+                };
                 // return app.database().ref().set(99);
-                return Promise.all(
-                    [root.child('rounds').child(k).child('cloudScore').set(score),
-                    root.child('rounds').child(k).child('score').set(score),
-                    root.child('rounds').child(k).child('trueValue').set(trueValue),
-                    ]
-                );
+                return root.update(updates);
             });
     });

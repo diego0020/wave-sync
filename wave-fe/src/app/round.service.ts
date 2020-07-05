@@ -99,7 +99,7 @@ export class RoundService {
       finalGuess: null,
     };
     const resetGuess = {
-      guess: 0
+      guess: 50
     };
 
     this.newRoundData = null;
@@ -163,6 +163,8 @@ export class RoundService {
     const roundData = { ...rawData };
     roundData.amTeller = roundData.teller === this.auth.userSnap.uid;
     roundData.id = this.roundId;
+    roundData.score = roundData.score || roundData.clientScore;
+    roundData.trueValue = roundData.trueValue || roundData.clientTrueValue;
 
     if (roundData.phase === 0 && roundData.amTeller && this.newRoundData === null) {
       this.newRoundData = this.generateRandData();
@@ -189,7 +191,7 @@ export class RoundService {
     const updates = {
       [this.guessAddr + '/guess']: finalGuess,
       [this.roundAddr + '/phase']: 4,
-      [this.roundAddr + '/finalGuess']: finalGuess,
+      [this.roundAddr + '/clientFinalGuess']: finalGuess,
       [finalGuessAddr]: finalGuessData,
     };
 
@@ -227,10 +229,13 @@ export class RoundService {
 
   calculateScore(a: number, b: number) {
     const diff = Math.abs(a - b);
-    if (diff < 10) {
-      return 10;
-    } else if (diff < 20) {
-      return 5;
+    if (diff < 6) {
+      return 4;
+    } else if (diff < 12) {
+      return 3;
+    }
+    else if (diff < 18) {
+      return 2;
     }
     return 0;
   }
