@@ -1,6 +1,6 @@
 # wave-sync
 
-A web version of wave length.
+An online version of wave length.
 
 Built using angular and firebase
 
@@ -16,7 +16,7 @@ Each round consists of 4 phases
 
 0. Pending: The round is about to start
 
-1. Setup: The gauge is set at a random position, which is revealed to the teller. The teller also can select between two cards which represent the edges of the meter. Finally the teller gives a clue.
+1. Setup: The gauge is set at a random position, which is revealed to the psychiv. The psychic also can select between two cards which represent the edges of the meter. Finally the psychic gives a clue.
 
 2. The rest of the team must reach an agreement of the position of the needle given the clue.
 
@@ -43,7 +43,7 @@ Each round consists of 4 phases
             "guessingTeam" : "a",
             "teller" : "$player",
             "clue" : "lion",
-            "extremes" : {"start": "easy to kill", "end": "hard to kill"}
+            "extremes" : {"start": "easy to kill", "end": "hard to kill", "startColor": "blue", "endColor": "red"}
         }
     },
     "guesses": {
@@ -58,24 +58,30 @@ Each round consists of 4 phases
             "truePosition" : 44,
         }
     },
+    "finalGuesses" : {
+        "$roundId" : {
+            "timestamp" : 1400000,
+            "user": "$userId",
+            "value": 30
+        }
+    },
     "players" : {
-        "id": {
+        "$id": {
             "displayName" : "n"
+        }
+    },
+    "displayNames": {
+        "displayName": {
+            "id": "$playerId"
         }
     }
 }
 ````
 
-## Tasks
+## Pending
 
-- [x] Add anonymous authentication
-- [x] Create mock game
-- [x] Create round data
-- [x] Move FE game logic to service
-- [x] Split into components 
-- [x] Switch css classes to BEM
-- [x] Implement rounds state machine
-- [x] Implement phase 1
-- [x] Implement phase 2
-- [x] Implement phase 4
-- [ ] Implement phase 3
+- [ ] user names
+- [ ] online status
+- [ ] end round timer
+- [ ] teams
+- [ ] phase 3
