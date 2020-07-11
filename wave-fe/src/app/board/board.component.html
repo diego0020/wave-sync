@@ -25,13 +25,14 @@
     </button>
   </form>
 
-
-  <div class="fan__wrapper" *ngIf="trueValueRotation$ | async as trueVal">
-    <div class="fan__rotation" [ngStyle]="{ transform: 'rotate(' + trueVal + 'turn)' }">
-      <div class=" fan__background">
-        <div class="fan__one" [ngStyle]="firstFanRegionClip">
-          <div class="fan__two" [ngStyle]="secondFanRegionClip">
-            <div class="fan__three" [ngStyle]="thirdFanRegionClip">
+  <div class="fan__wrapper2">
+    <div class="fan__wrapper" *ngIf="trueValueRotation$ | async as trueVal">
+      <div class="fan__rotation" [ngStyle]="{ transform: 'rotate(' + trueVal + 'turn)' }">
+        <div class=" fan__background">
+          <div class="fan__one" [ngStyle]="firstFanRegionClip">
+            <div class="fan__two" [ngStyle]="secondFanRegionClip">
+              <div class="fan__three" [ngStyle]="thirdFanRegionClip">
+              </div>
             </div>
           </div>
         </div>
