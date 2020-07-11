@@ -23,10 +23,10 @@ export class ActionsComponent implements OnInit {
     this.skipMessage$ = this.roundService.round$.pipe(
       map(round => {
         if (round.phase > 2) {
-          return 'Next Round';
+          return 'Become psychic';
         }
-        if (round.phase > 0 && round.amTeller) {
-          return 'Skip Round';
+        if (round.phase > 0 || !round.amTeller) {
+          return 'Skip Round and become psychic';
         }
         return null;
       })

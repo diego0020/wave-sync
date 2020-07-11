@@ -1,8 +1,7 @@
 <div class="m-2">
   <p>User: <strong>{{ userId$ | async | slice: 0:8 }}</strong></p>
   <ng-container *ngIf="round$ | async as round">
-    <p>Teller: <strong>{{ round.teller | slice: 0:8 }}</strong></p>
-    <p>Phase: {{ round.phase }}</p>
+    <p>Psychic: <strong>{{ round.teller | slice: 0:8 }}</strong></p>
   </ng-container>
 
   <div class="history">
