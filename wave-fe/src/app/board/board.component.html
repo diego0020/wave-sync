@@ -30,9 +30,9 @@
     <div class="fan__rotation" [ngStyle]="{ transform: 'rotate(' + (rotation$ | async) + 'turn)' }">
       <!-- [ngStyle]="{ transform: 'rotate(' + trueVal + 'turn)' }"-->
       <div class="fan__background">
-        <div class="fan__one">
-          <div class="fan__two">
-            <div class="fan__three">
+        <div class="fan__one" [ngStyle]="firstFanRegionClip">
+          <div class="fan__two" [ngStyle]="secondFanRegionClip">
+            <div class="fan__three" [ngStyle]="thirdFanRegionClip">
             </div>
           </div>
         </div>

@@ -2,12 +2,12 @@ import * as functions from 'firebase-functions';
 
 function calculateScore(a: number, b: number) {
     const diff = Math.abs(a - b);
-    if (diff < 6) {
+    if (diff < 4) {
         return 4;
     } else if (diff < 12) {
         return 3;
     }
-    else if (diff < 18) {
+    else if (diff < 20) {
         return 2;
     }
     return 0;

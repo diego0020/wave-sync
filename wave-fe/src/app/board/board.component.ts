@@ -19,8 +19,14 @@ export class BoardComponent implements OnInit {
   showClueInput$: Observable<boolean>;
   clueInput = '';
   sendingData = false;
+  firstFanRegionClip: any;
+  secondFanRegionClip: any;
+  thirdFanRegionClip: any;
 
   constructor(private guessService: GuessService, private roundService: RoundService) {
+    this.thirdFanRegionClip = this.getClipPath(4);
+    this.secondFanRegionClip = this.getClipPath(12);
+    this.firstFanRegionClip = this.getClipPath(20);
     this.guess$ = guessService.guess$;
     this.rotation$ = this.guess$.pipe(
       map(n => 0.5 + (n / 200))
@@ -87,5 +93,16 @@ export class BoardComponent implements OnInit {
     this.clueInput = '';
     this.sendingData = true;
     window.setTimeout(() => { this.sendingData = false; }, 1000);
+  }
+
+  private getClipPath(perc: number) {
+    const radAngle = perc * Math.PI / 100;
+    const halfAngle = radAngle / 2;
+    const delta = Math.tan(halfAngle) * 100;
+    const top = 50 + delta;
+    const bottom = 50 - delta;
+    return {
+      'clip-path': `polygon(50% 50%, 100% ${bottom}%, 100% ${top}%)`
+    };
   }
 }

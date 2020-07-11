@@ -10,7 +10,7 @@ $game-bg-darken: darken($game-bg, 10%);
 $game-bg-lighten: lighten($game-bg, 10%);;
 $game-bg-text: lighten($game-bg, 50%);
 $clues-height: 110px;
-$fan-size: 100vmin;
+$fan-size: 80vmin;
 
 body {
   background-color: $game-bg;
@@ -355,27 +355,23 @@ body {
   &__background {
     width: 100%;
     height: 100%;
-    background-color: white;
   }
 
   &__one {
     width: 100%;
     height: 100%;
-    background-color: yellow;
-    clip-path: polygon(50% 50%, 100% 25%, 100% 75%); 
+    background-color: #8f6211;
   }
 
   &__two {
     width: 100%;
     height: 100%;
-    background-color: greenyellow;
-    clip-path: polygon(50% 50%, 100% 35%, 100% 65%); 
+    background-color: #9f4828;
   }
 
   &__three {
     width: 100%;
     height: 100%;
-    background-color: green;
-    clip-path: polygon(50% 50%, 100% 45%, 100% 55%); 
+    background-color: #394782;
   }
 }
