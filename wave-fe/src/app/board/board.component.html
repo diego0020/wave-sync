@@ -25,11 +25,24 @@
     </button>
   </form>
 
-  <div class="board__needle" *ngIf="!(showClueInput$ | async)"
-    [ngStyle]="{ transform: 'rotate(' + (rotation$ | async) + 'turn)' }"></div>
 
-  <div class="board__needle board__needle--true" *ngIf="trueValueRotation$ | async as trueVal"
-    [ngStyle]="{ transform: 'rotate(' + trueVal + 'turn)' }"></div>
+  <div class="fan__wrapper" *ngIf="trueValueRotation$ | async as trueVal">
+    <div class="fan__rotation" [ngStyle]="{ transform: 'rotate(' + (rotation$ | async) + 'turn)' }">
+      <!-- [ngStyle]="{ transform: 'rotate(' + trueVal + 'turn)' }"-->
+      <div class="fan__background">
+        <div class="fan__one">
+          <div class="fan__two">
+            <div class="fan__three">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="board__needle" *ngIf="!(showClueInput$ | async)"></div>
+
+  <!--[ngStyle]="{ transform: 'rotate(' + (rotation$ | async) + 'turn)' }"-->
 
   <div class="board__guess" *ngIf="!(showClueInput$ | async)">
     {{ guess$ | async }}
