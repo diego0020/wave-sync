@@ -67,11 +67,12 @@ Each round consists of 4 phases
     },
     "players" : {
         "$id": {
-            "displayName" : "n"
+            "displayName" : "displayName",
+            "lastSeen" : 140000000
         }
     },
     "displayNames": {
-        "displayName": {
+        "$displayName": {
             "id": "$playerId"
         }
     }
