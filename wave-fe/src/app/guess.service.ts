@@ -94,7 +94,7 @@ export class GuessService {
   }
 
   sendFinalGuess() {
-    this.roundService.sendFinalGuess(this.optimisticGuess);
+    this.roundService.sendFinalGuess(this.trueValue);
   }
 
   private clamp(n: number) {

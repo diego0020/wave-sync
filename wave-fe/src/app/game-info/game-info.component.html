@@ -35,7 +35,10 @@
     <ul *ngIf="showHistory">
       <li *ngFor="let r of (history$ | async)" class="history-item">
         <p>
-          {{r.start}} - {{r.end}}
+          {{r.start}}
+        </p>
+        <p>
+          {{r.end}}
         </p>
         <p>
           {{r.clue}} : {{r.score}}

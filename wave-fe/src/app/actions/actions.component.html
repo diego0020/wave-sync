@@ -1,7 +1,29 @@
-<button *ngIf="skipMessage$ | async as msg" class="btn skip" (click)="reset()" [disabled]="throttled">
-  {{msg}}
-</button>
+<div *ngIf="skipMessage$ | async as msg" class="btn skip">
+  <button (click)="toggleSkipRound()" [disabled]="throttled" *ngIf="!sendingSkipRound">
+    {{msg}}
+  </button>
+  <div class="skip__confirm" *ngIf="sendingSkipRound">
+    <button (click)="doSkipRound()" [disabled]="skipTimeout > 0 || throttled " type="button"
+      class="skip__confirm_btn skip__confirm_btn--do">
+      Send <span *ngIf="skipTimeout > 0">( {{skipTimeout}} s. )</span>
+    </button>
+    <button (click)="toggleSkipRound()" type="button" class="skip__confirm_btn skip__confirm_btn--cancel">
+      Cancel
+    </button>
+  </div>
+</div>
 
-<button *ngIf="showSend$ | async" class="btn send" (click)="sendGuess()" [disabled]="throttled ">
-  Send Guess
-</button>
+<div *ngIf="(showSend$ | async)" class="btn send">
+  <button (click)="toggleSendGuess()" [disabled]="throttled" type="button" *ngIf="!sendingFinalGuess">
+    Send Guess
+  </button>
+  <div class="send__confirm" *ngIf="sendingFinalGuess">
+    <button (click)="doSendGuess()" [disabled]="sendTimeout > 0 || throttled " type="button"
+      class="send__confirm_btn send__confirm_btn--do">
+      Send <span *ngIf="sendTimeout > 0">( {{sendTimeout}} s. )</span>
+    </button>
+    <button (click)="toggleSendGuess()" type="button" class="send__confirm_btn send__confirm_btn--cancel">
+      Cancel
+    </button>
+  </div>
+</div>
