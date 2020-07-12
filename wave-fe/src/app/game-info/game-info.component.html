@@ -2,7 +2,7 @@
   <h2>Players</h2>
   <ul>
     <li *ngFor="let user of (users$ | async); trackBy: getUserKey">
-      <span>
+      <span [title]="user.id">
         {{user.userName}}
       </span>
       <span *ngIf="user.psychic" title="Psychic">
@@ -16,8 +16,10 @@
 </div>
 
 <div class="history">
-  <p>User: <strong>{{ userId$ | async | slice: 0:8 }}</strong></p>
   <div>
+    <p *ngIf="userId$ | async as myUser" title="myUser.id">{{myUser.userName}}</p>
+    <div>
+    </div>
     <h2>History</h2>
     <ul>
       <li *ngFor="let r of (history$ | async)" class="history-item">

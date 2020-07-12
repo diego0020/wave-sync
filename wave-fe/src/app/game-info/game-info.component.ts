@@ -16,14 +16,14 @@ export class GameInfoComponent implements OnInit {
   userId$: Observable<any>;
   users$: Observable<any>;
   history$: Observable<any[]>;
+  showChangeUser = false;
+  showHistory = true;
 
-  constructor(auth: AuthService,
-              previousRondService: PreviousRoundsService,
-              usersService: UsersService
+  constructor(
+    previousRondService: PreviousRoundsService,
+    private usersService: UsersService
   ) {
-    this.userId$ = auth.user$.pipe(
-      map(u => u && u.uid)
-    );
+    this.userId$ = usersService.myUser$;
     this.history$ = previousRondService.history$;
     this.users$ = usersService.users$;
   }
@@ -33,6 +33,10 @@ export class GameInfoComponent implements OnInit {
 
   getUserKey(u) {
     return u.id;
+  }
+
+  changeUserName(newUserName: string) {
+    this.usersService.changeUserName(newUserName);
   }
 
 }
