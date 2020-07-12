@@ -36,6 +36,13 @@
           ".validate": "newData.isNumber() && newData.val() >=0 && newData.val() <=100"
         }
       }
+    },
+    "users": {
+      ".read": "auth !== null",
+      ".indexOn": "lastSeen",
+      "$userId": {
+        ".write": "auth.uid === $userId"
+      }
     }
   }
 }

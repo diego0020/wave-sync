@@ -23,8 +23,20 @@ export class AuthService {
     });
 
     auth.onAuthStateChanged(user => {
-      this.currUser = user;
-      this.userSubj.next(user);
+      const connRef = firebase.database().ref('.info/connected');
+      const userRef = firebase.database().ref('users/' + user.uid);
+      connRef.on('value', (snap) => {
+        userRef.onDisconnect().update(
+          { lastSeen: firebase.database.ServerValue.TIMESTAMP }
+        );
+        userRef.update({
+          lastSeen: 'online'
+        });
+        if (snap.val()) {
+          this.currUser = user;
+          this.userSubj.next(user);
+        }
+      });
     });
 
   }

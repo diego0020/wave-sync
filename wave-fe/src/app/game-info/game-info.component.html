@@ -1,10 +1,23 @@
 <div class="m-2">
-  <p>User: <strong>{{ userId$ | async | slice: 0:8 }}</strong></p>
-  <ng-container *ngIf="round$ | async as round">
-    <p>Psychic: <strong>{{ round.teller | slice: 0:8 }}</strong></p>
-  </ng-container>
+  <h2>Players</h2>
+  <ul>
+    <li *ngFor="let user of (users$ | async); trackBy: getUserKey">
+      <span>
+        {{user.userName}}
+      </span>
+      <span *ngIf="user.psychic" title="Psychic">
+        📡
+      </span>
+      <span *ngIf="!user.online" title="offline">
+        ⌛
+      </span>
+    </li>
+  </ul>
+</div>
 
-  <div class="history">
+<div class="history">
+  <p>User: <strong>{{ userId$ | async | slice: 0:8 }}</strong></p>
+  <div>
     <h2>History</h2>
     <ul>
       <li *ngFor="let r of (history$ | async)" class="history-item">

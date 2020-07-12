@@ -65,7 +65,7 @@ Each round consists of 4 phases
             "value": 30
         }
     },
-    "players" : {
+    "users" : {
         "$id": {
             "displayName" : "displayName",
             "lastSeen" : 140000000
