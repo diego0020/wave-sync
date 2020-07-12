@@ -17,7 +17,7 @@ export class UsersService {
   myUser$: Observable<any>;
 
   constructor(
-    authService: AuthService,
+    private authService: AuthService,
     roundService: RoundService
   ) {
     const usersRef = firebase.database().ref('users');
@@ -27,7 +27,6 @@ export class UsersService {
         .orderByChild('lastSeen')
         .startAt(startTime)
         .on('value', (snap) => {
-          console.log(snap.val());
           this.usersSubject.next(snap.val());
         });
     });
@@ -39,8 +38,6 @@ export class UsersService {
       );
   }
   formatUsers([users, round]) {
-    console.log(users);
-    console.log(round);
     const psychic = round.teller;
     return Object.keys(users).map(
       k => {
@@ -56,16 +53,20 @@ export class UsersService {
   }
 
   formatOwnUser([users, auth]) {
-    console.log(auth.uid);
     const myUser = users[auth.uid];
-    console.log(myUser);
     return {
       userName: (myUser && myUser.displayName) || auth.uid.substring(0, 8),
       id: auth.uid || '....'
     };
   }
 
-  changeUserName(newUserName: string) {
-
+  changeUserName(newUserName: string): Promise<any> {
+    if (this.authService.userSnap) {
+      const userPath = 'users/' + this.authService.userSnap.uid;
+      return firebase.database().ref(userPath).update(
+        { displayName: newUserName }
+      );
+    }
+    return Promise.resolve(null);
   }
 }

@@ -41,7 +41,10 @@
       ".read": "auth !== null",
       ".indexOn": "lastSeen",
       "$userId": {
-        ".write": "auth.uid === $userId"
+        ".write": "auth.uid === $userId",
+        "displayName": {
+          ".validate": "newData.isString() && newData.val().length > 2 && newData.val().length < 20"
+        }
       }
     }
   }

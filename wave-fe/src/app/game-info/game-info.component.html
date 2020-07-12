@@ -1,5 +1,5 @@
-<div class="m-2">
-  <h2>Players</h2>
+<div class="m-2 players">
+  <h2 class="players__header">Players</h2>
   <ul>
     <li *ngFor="let user of (users$ | async); trackBy: getUserKey">
       <span [title]="user.id">
@@ -15,13 +15,24 @@
   </ul>
 </div>
 
-<div class="history">
-  <div>
-    <p *ngIf="userId$ | async as myUser" title="myUser.id">{{myUser.userName}}</p>
-    <div>
+<div class="game-data">
+  <div class="current-user" *ngIf="userId$ | async as myUser">
+    <div *ngIf="!showChangeUser" title="myUser.id">
+      {{myUser.userName}}
+      <button class="current-user__change" type="button" (click)="toggleChangeUserName()">(change)</button>
     </div>
-    <h2>History</h2>
-    <ul>
+    <form *ngIf="showChangeUser" title="myUser.id" (submit)="changeUserName()">
+      <input [(ngModel)]="tempUserName" name="userName" minlength="4" maxlength="20" />
+      <button class="current-user__send" type="submit" [disabled]="loading">change </button>
+    </form>
+  </div>
+  <div class="history">
+    <h2 class="history__header">History <button>
+        <button (click)="toggleShowHistory()" *ngIf="showHistory">(hide)</button>
+        <button (click)="toggleShowHistory()" *ngIf="!showHistory">(show)</button>
+      </button>
+    </h2>
+    <ul *ngIf="showHistory">
       <li *ngFor="let r of (history$ | async)" class="history-item">
         <p>
           {{r.start}} - {{r.end}}

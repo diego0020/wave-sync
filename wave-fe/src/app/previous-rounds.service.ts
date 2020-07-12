@@ -19,7 +19,7 @@ export class PreviousRoundsService {
         if (currentRound.id !== this.activeRound) {
           this.activeRound = currentRound.id;
           this.histRef = firebase.database()
-            .ref('rounds').orderByKey().limitToLast(4).endAt(this.activeRound);
+            .ref('rounds').orderByKey().limitToLast(6).endAt(this.activeRound);
 
           this.histRef.once('value', snap => {
             this.historySubject.next(

@@ -316,10 +316,29 @@ body {
   align-items: center;
 }
 
-.history {
+.game-data {
   position: absolute;
   right: 10px;
   top: 0px;
+}
+
+.current-user {
+  text-align: right;
+}
+
+.history {
+  margin-top: 1ex;
+  text-align: right;
+
+  &__header {
+    margin-bottom: 1ex;
+  }
+}
+
+.players{
+  &__header {
+    margin-bottom: 1ex;
+  }
 }
 
 .skip {
