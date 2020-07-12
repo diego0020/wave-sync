@@ -341,17 +341,31 @@ body {
   }
 }
 
-.skip {
-  position: absolute;
-  right: 10px;
+.actions{
+  &__skip {
+    position: absolute;
+    right: 10px;
+    &__confirm-btn {
+      min-width: 100px;
+      margin: 0 10px;
+    }
+  }
+
+  &__send {
+    margin: 0 auto;
+    &__confirm-btn {
+      min-width: 100px;
+      margin: 0 10px;
+    }
+  }
 }
 
-.send {
-  margin: 0 auto;
+.btn:disabled {
+  cursor: not-allowed
 }
 
 .history-item {
-  margin-top: 0.5ex;
+  margin-top: 1ex;
 }
 
 .fan {
