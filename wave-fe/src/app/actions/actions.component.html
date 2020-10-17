@@ -5,7 +5,7 @@
   <div class="skip__confirm" *ngIf="sendingSkipRound">
     <button (click)="doSkipRound()" [disabled]="skipTimeout > 0 || throttled " type="button"
       class="btn actions__skip__confirm-btn actions__skip__confirm-btn--do">
-      Send <span *ngIf="skipTimeout > 0">( {{skipTimeout}} s. )</span>
+      {{msg}} <span *ngIf="skipTimeout > 0">( {{skipTimeout}} s. )</span>
     </button>
     <button (click)="toggleSkipRound()" type="button" class="btn actions__skip__confirm-btn skip__confirm-btn--cancel">
       Cancel

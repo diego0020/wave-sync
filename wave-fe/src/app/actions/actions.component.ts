@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { GuessService } from '../guess.service';
 
-const SEND_TIMEOUT = 5; // seconds
+const SEND_TIMEOUT = 3; // seconds
 
 @Component({
   selector: 'app-actions',

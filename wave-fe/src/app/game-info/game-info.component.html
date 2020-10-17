@@ -21,27 +21,31 @@
       {{myUser.userName}}
       <button class="current-user__change" type="button" (click)="toggleChangeUserName()">(change)</button>
     </div>
-    <form *ngIf="showChangeUser" title="myUser.id" (submit)="changeUserName()">
+    <form *ngIf="showChangeUser" title="myUser.id" (ngSubmit)="changeUserName()">
       <input [(ngModel)]="tempUserName" name="userName" minlength="4" maxlength="20" />
       <button class="current-user__send" type="submit" [disabled]="loading">change </button>
     </form>
   </div>
   <div class="history">
-    <h2 class="history__header">History <button>
-        <button (click)="toggleShowHistory()" *ngIf="showHistory">(hide)</button>
-        <button (click)="toggleShowHistory()" *ngIf="!showHistory">(show)</button>
-      </button>
-    </h2>
-    <ul *ngIf="showHistory">
+    <button (click)="toggleShowHistory()">
+      <h2 class="history__header">History
+        <span *ngIf="showHistory">(hide)</span>
+        <span *ngIf="!showHistory">(show)</span>
+      </h2>
+    </button>
+    <ul *ngIf="showHistory" class="history__content">
       <li *ngFor="let r of (history$ | async)" class="history-item">
+        <p>
+          {{r.score}} ⭐
+        </p>
         <p>
           {{r.start}}
         </p>
         <p>
-          {{r.end}}
+          {{r.clue}}
         </p>
         <p>
-          {{r.clue}} : {{r.score}}
+          {{r.end}}
         </p>
       </li>
     </ul>

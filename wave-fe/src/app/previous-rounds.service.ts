@@ -33,7 +33,7 @@ export class PreviousRoundsService {
 
   private procHistory(rawHistory): any[] {
     return Object.keys(rawHistory)
-      .filter(k => k !== this.activeRound)
+      .filter(k => k !== this.activeRound && rawHistory[k].extremes.end.length > 1)
       .map(k => {
         const round = rawHistory[k];
         return {
