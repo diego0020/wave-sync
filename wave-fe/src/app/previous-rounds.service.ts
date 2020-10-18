@@ -5,7 +5,7 @@ import 'firebase/database';
 import { ReplaySubject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PreviousRoundsService {
   private activeRound: string;
@@ -14,34 +14,38 @@ export class PreviousRoundsService {
   history$ = this.historySubject.asObservable();
 
   constructor(private roundService: RoundService) {
-    this.roundService.round$.subscribe(
-      currentRound => {
-        if (currentRound.id !== this.activeRound) {
-          this.activeRound = currentRound.id;
-          this.histRef = firebase.database()
-            .ref('rounds').orderByKey().limitToLast(6).endAt(this.activeRound);
+    this.roundService.round$.subscribe((currentRound) => {
+      if (currentRound.id !== this.activeRound) {
+        this.activeRound = currentRound.id;
+        this.histRef = firebase
+          .database()
+          .ref('rounds')
+          .orderByKey()
+          .limitToLast(6)
+          .endAt(this.activeRound);
 
-          this.histRef.once('value', snap => {
-            this.historySubject.next(
-              this.procHistory(snap.val())
-            );
-          });
-        }
+        this.histRef.once('value', (snap) => {
+          this.historySubject.next(this.procHistory(snap.val()));
+        });
       }
-    );
+    });
   }
 
   private procHistory(rawHistory): any[] {
-    return Object.keys(rawHistory)
-      .filter(k => k !== this.activeRound && rawHistory[k].extremes.end.length > 1)
-      .map(k => {
+    const temp = Object.keys(rawHistory)
+      .filter(
+        (k) => k !== this.activeRound && rawHistory[k].extremes.end.length > 1
+      )
+      .map((k) => {
         const round = rawHistory[k];
         return {
           clue: round.clue,
           score: round.score || 0,
           start: round.extremes.start,
-          end: round.extremes.end
+          end: round.extremes.end,
         };
       });
+    temp.reverse();
+    return temp;
   }
 }
