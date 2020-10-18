@@ -13,47 +13,62 @@
     </div>
   </ng-container>
 
-  <form (ngSubmit)="sendClue($event)" *ngIf="showClueInput$ | async" autocomplete="off" class="ml-2">
+  <form
+    (ngSubmit)="sendClue($event)"
+    *ngIf="showClueInput$ | async"
+    autocomplete="off"
+    class="ml-2"
+  >
     <div class="ml-1 mb-2">
       <label>Enter the Clue:</label>
     </div>
 
-    <input class="form-input mx-1" name="clueInput" [(ngModel)]="clueInput" maxlength="20" minlength="1" type="text" />
+    <input
+      class="form-input mx-1"
+      name="clueInput"
+      [(ngModel)]="clueInput"
+      maxlength="20"
+      minlength="1"
+      type="text"
+    />
 
-    <button class="btn" type="submit" (click)="sendClue($event)">
-      Send
-    </button>
+    <button class="btn" type="submit" (click)="sendClue($event)">Send</button>
   </form>
 
   <div class="fan__wrapper2">
     <div class="fan__wrapper" *ngIf="trueValueRotation$ | async as trueVal">
-      <div class="fan__rotation" [ngStyle]="{ transform: 'rotate(' + trueVal + 'turn)' }">
-        <div class=" fan__background">
+      <div
+        class="fan__rotation"
+        [ngStyle]="{ transform: 'rotate(' + trueVal + 'turn)' }"
+      >
+        <div class="fan__background">
           <div class="fan__one" [ngStyle]="firstFanRegionClip">
             <div class="fan__two" [ngStyle]="secondFanRegionClip">
-              <div class="fan__three" [ngStyle]="thirdFanRegionClip">
-              </div>
+              <div class="fan__three" [ngStyle]="thirdFanRegionClip"></div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <div class="fan__cover"></div>
   </div>
 
-  <div class="board__needle" *ngIf="!(showClueInput$ | async)"
-    [ngStyle]="{ transform: 'rotate(' + (rotation$ | async) + 'turn)' }"></div>
+  <div
+    class="board__needle"
+    *ngIf="!(showClueInput$ | async)"
+    [ngStyle]="{ transform: 'rotate(' + (rotation$ | async) + 'turn)' }"
+  ></div>
 
   <div class="board__guess" *ngIf="!(showClueInput$ | async)">
     {{ guess$ | async }}
   </div>
 
   <div class="board__waiting" *ngIf="message$ | async as message">
-    {{message}}
+    {{ message }}
   </div>
   <app-clues [clues]="clues$ | async"></app-clues>
 
-  <div class="board__score" *ngIf="(score$ | async)  as score">
+  <div class="board__score" *ngIf="score$ | async as score">
     You won {{ score.value }} points!!!
   </div>
-
 </div>
