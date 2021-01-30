@@ -1,16 +1,12 @@
 <div class="m-2 players">
   <h2 class="players__header">Players</h2>
   <ul>
-    <li *ngFor="let user of (users$ | async); trackBy: getUserKey">
+    <li *ngFor="let user of users$ | async; trackBy: getUserKey">
       <span [title]="user.id">
-        {{user.userName}}
+        {{ user.userName }}
       </span>
-      <span *ngIf="user.psychic" title="Psychic">
-        📡
-      </span>
-      <span *ngIf="!user.online" title="offline">
-        ⌛
-      </span>
+      <span *ngIf="user.psychic" title="Psychic"> 📡 </span>
+      <span *ngIf="!user.online" title="offline"> ⌛ </span>
     </li>
   </ul>
 </div>
@@ -18,34 +14,48 @@
 <div class="game-data">
   <div class="current-user" *ngIf="userId$ | async as myUser">
     <div *ngIf="!showChangeUser" title="myUser.id">
-      {{myUser.userName}}
-      <button class="current-user__change" type="button" (click)="toggleChangeUserName()">(change)</button>
+      {{ myUser.userName }}
+      <button
+        class="current-user__change"
+        type="button"
+        (click)="toggleChangeUserName()"
+      >
+        (change)
+      </button>
     </div>
-    <form *ngIf="showChangeUser" title="myUser.id" (ngSubmit)="changeUserName()">
-      <input [(ngModel)]="tempUserName" name="userName" minlength="4" maxlength="20" />
-      <button class="current-user__send" type="submit" [disabled]="loading">change </button>
+    <form
+      *ngIf="showChangeUser"
+      title="myUser.id"
+      (ngSubmit)="changeUserName()"
+    >
+      <input
+        [(ngModel)]="tempUserName"
+        name="userName"
+        minlength="4"
+        maxlength="20"
+      />
+      <button class="current-user__send" type="submit" [disabled]="loading">
+        change
+      </button>
     </form>
   </div>
   <div class="history">
     <button (click)="toggleShowHistory()">
-      <h2 class="history__header">History
+      <h2 class="history__header">
+        History
         <span *ngIf="showHistory">(hide)</span>
         <span *ngIf="!showHistory">(show)</span>
       </h2>
     </button>
     <ul *ngIf="showHistory" class="history__content">
-      <li *ngFor="let r of (history$ | async)" class="history-item">
+      <li *ngFor="let r of history$ | async" class="history-item">
+        <p>{{ r.score }} ⭐</p>
         <p>
-          {{r.score}} ⭐
+          {{ r.start }}
         </p>
+        <p>&gt; {{ r.clue }}</p>
         <p>
-          {{r.start}}
-        </p>
-        <p>
-          {{r.clue}}
-        </p>
-        <p>
-          {{r.end}}
+          {{ r.end }}
         </p>
       </li>
     </ul>
